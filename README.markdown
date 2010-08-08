@@ -19,24 +19,24 @@ A Symphony extension that tracks user and system activity.
 
 ## Installation
 
-1. Place the 'tracker' folder in your Symphony 'extensions' directory.
-2. Go to `System > Extensions`, select "Tracker", choose "Enable" from the with-selected menu, then click Apply.
+1. Place the `tracker` folder in your Symphony `extensions` directory.
+2. Go to _System > Extensions_, select "Tracker", choose "Enable" from the with-selected menu, then click Apply.
 
 ## Usage
 
 ### Managing/Viewing Activities
 
-Activities can be viewed at `System > Tracker Activity`. It is possible from this page to delete individual activities or to clear all activity in the system.
+Activities can be viewed at _System > Tracker Activity_. It is possible from this page to delete individual activities or to clear all activity in the system.
 
 The view can be filtered with GET params using the normal Symphony back-end filtering syntax: 
 
-	?filter=column:values`
+	?filter=column:values
 
-`column` can be `item_type`, `item_id`, `action_type`, or `user_id`. `values` can be a comma-delimited list of values to filter on. The following values are acceptable:
+**column** can be any of: `item_type`, `item_id`, `action_type`, or `user_id`. **values** can be a comma-delimited list of values to filter on. The following values are acceptable:
 
-- For `item_type`: a section id, `pages`, `events`, `datasources`, `utilities`, `sections`, `authors`, `preferences`, or `extensions`
-- For `action_type`: 'updated', 'created', 'deleted', 'enabled', 'disabled', 'uninstalled'
-- For `user_id`: an author id
+- For **item_type**: a section id, `pages`, `events`, `datasources`, `utilities`, `sections`, `authors`, `preferences`, or `extensions`
+- For **action_type**: 'updated', 'created', 'deleted', 'enabled', 'disabled', 'uninstalled'
+- For **user_id**: an author id
 
 Example:
 
@@ -44,7 +44,7 @@ Example:
 
 ### Excluding Activities
 
-Go to `System > Preferences` and, in the Tracker section, choose any system elements, sections, or users you'd like to exclude from tracking.
+Tracker allows you to exclude certain types of activity from being tracked. Go to _System > Preferences_ and, in the "Tracker" section, choose any system elements, sections, or users you'd like to exclude from tracking.
 
 ### Using Activity Info on the Front End
 
@@ -54,8 +54,8 @@ The included data source, "Tracker Activity" can be attached to Pages and return
 
 Configuration options are available in the data source file, but rather than edit the included version, it's recommended to copy the code into a custom DS of your own:
 
-- Copy the `data.tracker_activity.php` file to your `workspace/data-sources` and rename it to `data.`**your_datasource**`.php`
-- Update the class name (line 6) to `datasource`**your_datasource**
+- Copy the `data.tracker_activity.php` file to your `workspace/data-sources` and rename it to data.**your_datasource**.php
+- Update the class name (line 6) to datasource**your_datasource**
 - Update the `about()` method (line 28) to reflect your data source's name and other info
 - Update the sorting and filtering options (lines 10-21) to suit your needs
 
@@ -70,7 +70,5 @@ Tracker uses lots of workarounds, because delegates simply don't exist for most 
 ### To Do
 
 - Track front-end submissions
-- Track when a site is put into maintenance mode?
-- Track when an ensemble is exported?
 - Enable other extensions to log activities
-- Build a Dashboard panel
+- Build a Dashboard panel?
