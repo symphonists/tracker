@@ -35,7 +35,7 @@ The view can be filtered with GET params using the normal Symphony back-end filt
 **column** can be any of: `item_type`, `item_id`, `action_type`, or `user_id`. **values** can be a comma-delimited list of values to filter on. The following values are acceptable:
 
 - For **item_type**: a section id, `pages`, `events`, `datasources`, `utilities`, `sections`, `authors`, `preferences`, or `extensions`
-- For **action_type**: 'updated', 'created', 'deleted', 'enabled', 'disabled', 'uninstalled'
+- For **action_type**: `updated`, `created`, `deleted`, `enabled`, `disabled`, `uninstalled`
 - For **user_id**: an author id
 
 Example:
