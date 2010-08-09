@@ -95,9 +95,11 @@
 					$col_desc->appendChild(Widget::Input("items[{$activity['id']}]", null, 'checkbox'));
 					
 				// Insert the row
-					$tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : NULL));
+					if(!is_null($description)) {
+						$tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : NULL));
 					
-					$bOdd = !$bOdd;
+						$bOdd = !$bOdd;
+					}
 				}
 			}
 			

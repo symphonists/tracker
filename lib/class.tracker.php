@@ -150,16 +150,18 @@
 			}
 			
 		// Concat author string, activity type, and an item description
-			$description = __(
-				'%1s %2s %3s.',
-				array(
-					$author_string,
-					__($activity['action_type']),
-					$item
-				) 
-			);
-					
-			return $description;
+			if(!is_null($item)) {
+				$description = __(
+					'%1s %2s %3s.',
+					array(
+						$author_string,
+						__($activity['action_type']),
+						$item
+					) 
+				);
+				return $description;
+			}
+
 		}
 		
 		public function formatEntryItem($activity, $fallback=FALSE) {
@@ -438,6 +440,10 @@
 							)
 						);
 					}
+				break;
+				
+				default:
+					$item = NULL;
 				break;
 			}
 			
