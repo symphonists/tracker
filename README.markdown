@@ -1,8 +1,8 @@
 # Tracker
 
-- Version: 0.9 beta
+- Version: 0.9.1 beta
 - Author: craig zheng
-- Build Date: 8th August 2010
+- Build Date: 9th August 2010
 - Requirements: Symphony 2.1
 
 ## Description
@@ -72,3 +72,8 @@ Tracker uses lots of workarounds, because delegates simply don't exist for most 
 - Track front-end submissions
 - Enable other extensions to log activities
 - Build a Dashboard panel?
+
+## Changelog
+
+- **0.9.1** Silently ignore unknown activities (e.g. from other extensions)
+- **0.9** Initial build
