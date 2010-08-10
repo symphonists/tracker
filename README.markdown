@@ -75,6 +75,6 @@ Tracker uses lots of workarounds, because delegates simply don't exist for most 
 
 ## Changelog
 
-- **0.9.2** When an Entry's primary field is very long, trim to a sane length
+- **0.9.2** Sanitize and trim an Entry's primary field ebfore using
 - **0.9.1** Silently ignore unknown activities (e.g. from other extensions)
 - **0.9** Initial build
