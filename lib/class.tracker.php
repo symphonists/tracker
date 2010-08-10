@@ -184,8 +184,9 @@
 			else {
 				$data = $entry->getData();
 				$primary_field = array_shift($data);
+				$primary_field = strip_tags($primary_field['value']);
 				
-				$value = (strlen($primary_field['value']) <= 75 ? $primary_field['value'] : substr($primary_field['value'], 0, 75) . '...');
+				$value = (strlen($primary_field) <= 75 ? $primary_field : substr($primary_field, 0, 75) . '...');
 			
 			// If we're creating the fallback, just return a string
 				if($fallback) {
