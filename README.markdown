@@ -1,8 +1,8 @@
 # Tracker
 
-- Version: 0.9.1 beta
+- Version: 0.9.2 beta
 - Author: craig zheng
-- Build Date: 9th August 2010
+- Build Date: 10th August 2010
 - Requirements: Symphony 2.1
 
 ## Description
@@ -75,5 +75,6 @@ Tracker uses lots of workarounds, because delegates simply don't exist for most 
 
 ## Changelog
 
+- **0.9.2** When an Entry's primary field is very long, trim to a sane length
 - **0.9.1** Silently ignore unknown activities (e.g. from other extensions)
 - **0.9** Initial build

@@ -184,15 +184,17 @@
 			else {
 				$data = $entry->getData();
 				$primary_field = array_shift($data);
+				
+				$value = (strlen($primary_field['value']) <= 75 ? $primary_field['value'] : substr($primary_field['value'], 0, 75) . '...');
 			
 			// If we're creating the fallback, just return a string
 				if($fallback) {
-					$entry_string = $primary_field['value'];
+					$entry_string = $value;
 				}
 			// Otherwise build a link to the entry
 				else {				
 					$entry_string = Widget::Anchor(
-						$primary_field['value'],
+						$value,
 						URL . '/symphony/publish/' . $section->get('handle') . '/edit/' . $activity['item_id']
 					)->generate();
 				}
