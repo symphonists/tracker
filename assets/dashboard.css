@@ -1,0 +1,12 @@
+div#dashboard .tracker_log table {
+	width: 100%;
+}
+
+div#dashboard .tracker_log table th,
+div#dashboard .tracker_log table td {
+	padding: 1px 10px 1px 0;
+}
+
+div#dashboard .tracker_log table th {
+	text-align: left;
+}
