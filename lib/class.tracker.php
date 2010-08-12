@@ -371,7 +371,7 @@
 							array(
 								($fallback ? $section->get('name') : Widget::Anchor(
 									$section->get('name'),
-									URL . '/symphony/blueprints/sections/edit/' . $activity['item_type']
+									URL . '/symphony/blueprints/sections/edit/' . $activity['item_id']
 								)->generate())
 							)
 						);

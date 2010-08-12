@@ -7,8 +7,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Tracker',
-				'version'		=> '0.9.2',
-				'release-date'	=> '2010-08-10',
+				'version'		=> '0.9.3',
+				'release-date'	=> '2010-08-12',
 				'author'		=> array(
 					'name'			=> 'craig zheng',
 					'email'			=> 'craig@symphony-cms.com'
