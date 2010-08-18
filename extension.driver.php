@@ -20,8 +20,8 @@
 		public function fetchNavigation() {
 			return array(
 				array(
-					'location'	=> 'System',
-					'name'		=> 'Tracker Activity',
+					'location'	=> __('System'),
+					'name'		=> __('Tracker Activity'),
 					'link'		=> '/',
 					'limit'		=> 'developer'
 				)
