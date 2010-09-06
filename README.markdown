@@ -1,8 +1,8 @@
 # Tracker
 
-- Version: 0.9.4 beta
+- Version: 0.9.5 beta
 - Author: craig zheng
-- Build Date: 1st September 2010
+- Build Date: 6th September 2010
 - Requirements: Symphony 2.1
 
 ## Description
@@ -75,6 +75,7 @@ Tracker uses lots of workarounds, because delegates simply don't exist for most 
 
 ## Changelog
 
+- **0.9.5** Localization improvements and German translation (courtesy of Nils Werner)
 - **0.9.4** Dashboard panel (courtesy of Nick Dunn), Data Source tweak
 - **0.9.3** Fix section description links
 - **0.9.2** Sanitize and trim an Entry's primary field ebfore using
