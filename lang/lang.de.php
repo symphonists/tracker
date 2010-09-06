@@ -17,9 +17,12 @@
 	 */
 
 	$dictionary = array(
+		
+		'Tracker' =>
+		'Fährtenleser',
 
 		'Tracker Activity' =>
-		'Aktivitäten verfolgen',
+		'Fährtenleser',
 		
 		'Excluded Users' =>
 		'Ausgeschlossene Benutzer',
