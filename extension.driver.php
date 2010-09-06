@@ -6,7 +6,7 @@
 
 		public function about() {
 			return array(
-				'name'			=> 'Tracker',
+				'name'			=> __('Tracker'),
 				'version'		=> '0.9.4',
 				'release-date'	=> '2010-09-01',
 				'author'		=> array(
@@ -280,7 +280,7 @@
 		// Fieldset and layout
 			$group = new XMLElement('fieldset');
 			$group->setAttribute('class', 'settings');
-			$group->appendChild(new XMLElement('legend', 'Tracker'));
+			$group->appendChild(new XMLElement('legend', __('Tracker')));
 
 			$div = new XMLElement('div');
 			$div->setAttribute('class', 'group triple');
