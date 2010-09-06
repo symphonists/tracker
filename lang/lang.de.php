@@ -18,44 +18,56 @@
 
 	$dictionary = array(
 
-		"Tracker Activity" =>
-		"Aktivitäten verfolgen",
+		'Tracker Activity' =>
+		'Aktivitäten verfolgen',
 		
-		"Activity" =>
-		"Aktivität",
+		'Excluded Users' =>
+		'Ausgeschlossene Benutzer',
 		
-		"Date" =>
-		"Datum",
+		'Excluded System Elements' =>
+		'Ausgeschlossene Elemente',
 		
-		"Time" =>
-		"Uhrzeit",
+		'Excluded Sections' =>
+		'Ausgeschlossene Sektionen',
 		
-		"No data available." =>
-		"Keine Daten verfügbar.",
+		'Activity' =>
+		'Aktivität',
 		
-		"updated" =>
-		"änderte",
+		'Date' =>
+		'Datum',
 		
-		"created" =>
-		"erstellte",
+		'Time' =>
+		'Uhrzeit',
 		
-		"enabled" =>
-		'aktivierte',
+		'No data available.' =>
+		'Keine Daten verfügbar.',
 		
-		"disabled" =>
-		"deaktivierte",
+		'%1$s updated %2$s.' =>
+		'%1$s hat %2$s geändert.',
 		
-		" %1s in the %2s section" =>
-		" den Eintrag %1s in der Sektion %2s",
+		'%1$s created %2$s.' =>
+		'%1$s hat %2$s erstellt.',
 		
-		" the %1s page %2s" =>
+		'%1$s enabled %2$s.' =>
+		'%1$s hat %2$s aktiviert',
+		
+		'%1$s disabled %2$s.' =>
+		'%1$s hat %2$s deaktiviert.',
+		
+		'%1$s uninstalled %2$s.' =>
+		'%1$s hat %2$s deinstalliert.',
+		
+		' %1s in the %2s section' =>
+		' den Eintrag %1s in der Sektion %2s',
+		
+		' the %1s page %2s' =>
 		' %2$s der Seite %1$s',
 		
-		"template" =>
-		"das Template",
+		'template' =>
+		'das Template',
 		
-		" the %1s page" =>
-		" die Seite %1s",
+		' the %1s page' =>
+		' die Seite %1s',
 		
 		' the %1s event' =>
 		' das Event %s',
@@ -71,6 +83,9 @@
 		
 		' his/her %1s' =>
 		' sein/ihr %s',
+		
+		' the %s' =>
+		' die %s',
 		
 		' the author record for %1s' =>
 		' das Benutzerkonto von %s',
