@@ -7,8 +7,8 @@
 		public function about() {
 			return array(
 				'name'			=> 'Tracker',
-				'version'		=> '0.9.3',
-				'release-date'	=> '2010-08-12',
+				'version'		=> '0.9.4',
+				'release-date'	=> '2010-09-01',
 				'author'		=> array(
 					'name'			=> 'craig zheng',
 					'email'			=> 'craig@symphony-cms.com'
@@ -59,7 +59,22 @@
 					'page' 		=> '/backend/',
 					'delegate'	=> 'InitaliseAdminPageHead',
 					'callback'	=> 'parsePageLoad'
-				)
+				),
+				array(
+					'page'		=> '/backend/',
+					'delegate'	=> 'DashboardPanelRender',
+					'callback'	=> 'renderPanel'
+				),
+				array(
+					'page'		=> '/backend/',
+					'delegate'	=> 'DashboardPanelOptions',
+					'callback'	=> 'dashboardPanelOptions'
+				),
+				array(
+					'page'		=> '/backend/',
+					'delegate'	=> 'DashboardPanelTypes',
+					'callback'	=> 'dashboardPanelTypes'
+				),
 			);
 		}
 		
@@ -401,5 +416,111 @@
 				);
 			}
 		}
+		
+		public function dashboardPanelTypes($context) {
+			$context['types']['tracker_log'] = "Tracker Log";
+		}
+
+		public function dashboardPanelOptions($context) {
+
+			$config = $context['existing_config'];
+
+			switch($context['type']) {
+
+				case 'tracker_log':
+
+					$fieldset = new XMLElement('fieldset', NULL, array('class' => 'settings'));
+					$fieldset->appendChild(new XMLElement('legend', __('Tracker Log')));
+
+					$label = Widget::Label(__('Limit'), Widget::Input('config[limit]', $config['limit']));
+					$fieldset->appendChild($label);
+
+					$context['form'] = $fieldset;
+
+				break;
+
+			}
+
+		}
+
+		public function renderPanel($context) {
+
+			$config = $context['config'];
+
+			switch($context['type']) {
+
+				case 'tracker_log':
+
+
+					Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/tracker/assets/' . 'dashboard.css', 'screen', 151);
+					$logs = Tracker::fetchActivities(array(), (int)$config['limit'], 1);
+
+					$thead = array(
+						array(__('Activity'), 'col'),
+						array(__('Date'), 'col'),
+						array(__('Time'), 'col')
+					);
+					$tbody = array();
+
+				// If there are no logs, display default message
+					if (!is_array($logs) or empty($logs)) {
+						$tbody = array(Widget::TableRow(array(
+							Widget::TableData(
+								__('No data available.'),
+								'inactive',
+								null,
+								count($thead)
+							)),
+							'odd')
+						);
+					}
+
+				// Otherwise, build table rows
+					else {
+						$bOdd = true;
+
+						foreach ($logs as $activity) {
+
+						// Format the date and time
+							$date = DateTimeObj::get(
+								__SYM_DATE_FORMAT__,
+								strtotime($activity['timestamp'] . ' GMT')
+							);
+							$time = DateTimeObj::get(
+								__SYM_TIME_FORMAT__,
+								strtotime($activity['timestamp'] . ' GMT')
+							);
+
+							$description = Tracker::getDescription($activity);
+
+						// Assemble the columns
+							$col_date = Widget::TableData($date);
+							$col_time = Widget::TableData($time);
+							$col_desc = Widget::TableData($description);
+
+						// Insert the row
+							if(!is_null($description)) {
+								$tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : NULL));
+
+								$bOdd = !$bOdd;
+							}
+						}
+					}
+
+				// Assemble the table
+					$table = Widget::Table(
+						Widget::TableHead($thead), null,
+						Widget::TableBody($tbody), null
+					);
+
+					$context['panel']->appendChild($table);
+
+				break;
+
+
+			}
+			
+		}
+		
 
 	}

@@ -72,8 +72,8 @@
 		// Build the XML
 			foreach($activities as $activity) {
 
-			// Capture the entry ID for output param
-				$param_output[] = $activity['item_id'];
+			// Capture the section and entry ID for output params
+				$param_output[$activity['item_type']][] = $activity['item_id'];
 			
 			// Break the fallback description into useful bits
 				$activity['fallback_description'] = explode(
@@ -112,8 +112,10 @@
 				$result->appendChild($item);
 			}
 			
-		// Add the entry IDs to the parameter pool
-			$param_pool['ds-' . $this->dsParamROOTELEMENT] = implode(', ', $param_output);
+		// Build output params
+			foreach($param_output as $section => $ids) {
+				$param_pool['ds-' . $this->dsParamROOTELEMENT . '-' . $section] = implode(', ', $ids);
+			}
 
 			return $result;
 		}
