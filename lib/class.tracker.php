@@ -151,11 +151,14 @@
 			
 		// Concat author string, activity type, and an item description
 			if(!is_null($item)) {
+				$template = sprintf('%%1$s %s %%2$s.', $activity['action_type']);
+				
+				$template = __($template);
+				
 				$description = __(
-					'%1s %2s %3s.',
+					$template,
 					array(
 						$author_string,
-						__($activity['action_type']),
 						$item
 					) 
 				);
@@ -421,11 +424,13 @@
 
 				case "preferences":
 					$item = __(
-						' the ' . 
-						Widget::Anchor(
-							'system preferences', 
-							URL . '/symphony/system/preferences'
-						)->generate()
+						' the %s',
+						array(
+							Widget::Anchor(
+								__('system preferences'),
+								URL . '/symphony/system/preferences'
+							)->generate()
+						)
 					);
 					
 				break;
