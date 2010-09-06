@@ -6,7 +6,7 @@
 
 		public function about() {
 			return array(
-				'name'			=> __('Tracker'),
+				'name'			=> 'Tracker',
 				'version'		=> '0.9.4',
 				'release-date'	=> '2010-09-01',
 				'author'		=> array(
