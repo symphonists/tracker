@@ -9,34 +9,67 @@
 
 		public function log($item_type, $item_id, $action_type, $user_id, $timestamp) {
 		
+			/**
+			 * Build author string for the fallback username. If we've got
+			 * a valid author, grab the full name. Otherwise, determine
+			 * whether it's an anonymous front-end user or a potentially
+			 * malicious person trying to access the back end. In the latter
+			 * case, output the IP or email we captured for reference. 
+			 */
 			$author = AuthorManager::fetchByID($user_id);
-		
+			
+			if($author instanceof Author) {
+				$username = $author->getFullName();
+			}
+			else {
+				if(is_numeric($item_type)) {
+					$username = 'A front-end user';
+				}
+				else {
+					$username = 'An unidentified user (' . $item_id . ')';
+				}
+			}
+			
+			/**
+			 * Build the $data array for our table columns
+			 */
 			$data = array(
 				'item_type'				=> $item_type,
 				'item_id'				=> $item_id,
 				'action_type'			=> $action_type,
 				'user_id'				=> $user_id,
 				'timestamp'				=> $timestamp,
-				'fallback_username'		=> $author->getFullName()
+				'fallback_username'		=> $username
 			);
 			
-		// If the item type is numeric, we're dealing with an entry
+			/**
+			 * Build the fallback description. Used if the item gets deleted.
+			 * If the item type is numeric, we're dealing with an entry,
+			 * otherwise it's some other system element. They're formatted
+			 * differently.
+			 */
 			if(is_numeric($item_type)) {
 				$data['fallback_description'] = Tracker::formatEntryItem($data, TRUE);
 			} else {
-		// Otherwise, it's a system element
 				$data['fallback_description'] = Tracker::formatElementItem($data, TRUE);
 			}
 			
+			/**
+			 * Push it into the DB.
+			 */
 			Symphony::Database()->insert($data, 'tbl_tracker_activity');
 		}
 		
 		public function fetchActivities(array $filters,$limit=NULL,$start=0,$sort='timestamp',$order='DESC') {
 		
-		// Build the filter SQL
+			/**
+			 * Build the filter SQL.
+			 */
 			$filter_sql = Tracker::buildFilterSQL($filters);
 		
-		// Run the query
+			/**
+			 * Run the query.
+			 */
 			$activities = Symphony::Database()->fetch('
 				SELECT
 					*
@@ -295,7 +328,8 @@
 				case "events":
 				
 				// Grab the event info
-					$about = $eventManager->about($activity['item_id']);
+					$handle = $eventManager->__getHandleFromFilename($activity['item_id']);
+					$about = $eventManager->about($handle);
 				
 				// If the event no longer exists, use the fallback description
 					if(empty($about)) {
@@ -308,7 +342,7 @@
 							array(
 								($fallback ? $about['name'] : Widget::Anchor(
 									$about['name'],
-									URL . '/symphony/blueprints/datasources/edit/' . $activity['item_id']
+									URL . '/symphony/blueprints/events/edit/' . $handle
 								)->generate())
 							)
 						);
@@ -318,7 +352,8 @@
 				case "datasources":
 				
 				// Grab the DS info
-					$about = $dsManager->about($activity['item_id']);
+					$handle = $dsManager->__getHandleFromFilename($activity['item_id']);
+					$about = $dsManager->about($handle);
 					
 				// If the DS no longer exists, use the fallback description
 					if(empty($about)) {
@@ -331,7 +366,7 @@
 							array(
 								($fallback ? $about['name'] : Widget::Anchor(
 									$about['name'],
-									URL . '/symphony/blueprints/datasources/edit/' . $activity['item_id']
+									URL . '/symphony/blueprints/datasources/edit/' . $handle
 								)->generate())
 							)
 						);
@@ -341,7 +376,7 @@
 				case "utilities":
 				
 				// If the utility no longer exists, use the fallback description
-					if(!file_exists(UTILITIES . '/' . $activity['item_id'] . '.xsl')) {
+					if(!file_exists(UTILITIES . '/' . $activity['item_id'])) {
 						$item = $activity['fallback_description'];
 					}
 				// Otherwise, build a description
@@ -349,9 +384,9 @@
 						$item = __(
 							' the %1s utility',
 							array(
-								($fallback ? $activity['item_id'] . '.xsl' : Widget::Anchor(
-									$activity['item_id'] . '.xsl',
-									URL . '/symphony/blueprints/utilities/edit' . $activity['item_id']
+								($fallback ? $activity['item_id'] : Widget::Anchor(
+									$activity['item_id'],
+									URL . '/symphony/blueprints/utilities/edit/' . str_replace('.xsl', '', $activity['item_id'])
 								)->generate())
 							)
 						);
@@ -435,6 +470,11 @@
 					
 				break;
 				
+				case "maintenance-mode":
+					$item = __(' maintenance mode');
+					
+				break;
+				
 				case "extensions":
 					$about = Administration::instance()->ExtensionManager->about($activity['item_id']);
 					if(empty($about)) {
@@ -448,6 +488,14 @@
 							)
 						);
 					}
+				break;
+				
+				case "login":
+					$item = __(' to the back end');
+				break;
+				
+				case "password-reset":
+					$item = __(' his/her password');
 				break;
 				
 				default:

@@ -6,8 +6,10 @@
 	
 		public function view() {
 		
+			$this->addStylesheetToHead(URL . '/extensions/tracker/assets/' . 'tracker.index.css', 'screen', 150);
+		
 		// Start building the page
-			$this->setPageType('table');
+			$this->setPageType('index');
 			$this->setTitle(
 				__('%1$s &ndash; %2$s',
 				array(
@@ -17,13 +19,17 @@
 			);
 			
 		// Add a button to clear all activity
+			$clearform = new XMLElement('form');
+			$clearform->setAttribute('method','post');
+			$clearform->setAttribute('action',Symphony::Engine()->getCurrentPageURL());
 			$button = new XMLElement('button', __('Clear All'));
 			$button->setAttribute('class', 'tracker confirm');
 			$button->setAttribute('title', __('Clear all Activity'));
 			$button->setAttribute('name', 'action[clear-all]');
+			$clearform->appendChild($button);
 			$this->appendSubheading(
 				__('Tracker Activity'),
-				$button
+				$clearform
 			);
 		
 		// Build pagination, sorting, and limiting info
@@ -108,7 +114,7 @@
 				Widget::TableHead($thead), null,
 				Widget::TableBody($tbody), null
 			);
-			
+			$table->setAttribute('class','selectable');
 			$this->Form->appendChild($table);
 			
 		// Append table actions
@@ -185,22 +191,24 @@
 		
 		public function __actionIndex(){
 		
-			$checked = @array_keys($_POST['items']);
-		
-			if(@array_key_exists('clear-all', $_POST['action'])) {
-				$sql = 'TRUNCATE `sym_tracker_activity`;';
-				$this->_Parent->Database->query($sql);
-				redirect($this->_Parent->getCurrentPageURL());
-			}
-			elseif(is_array($checked) && !empty($checked)) {
-				switch($_POST['with-selected']) {
+			if(isset($_POST)) {
+				$checked = @array_keys($_POST['items']);
+						
+				if(@array_key_exists('clear-all', $_POST['action'])) {
+					$sql = 'TRUNCATE `sym_tracker_activity`;';
+					$this->_Parent->Database->query($sql);
+					redirect($this->_Parent->getCurrentPageURL());
+				}
+				elseif(is_array($checked) && !empty($checked)) {
+					switch($_POST['with-selected']) {
 
-					case 'delete':
+						case 'delete':
 
-						$this->_Parent->Database->delete('tbl_tracker_activity', ' `id` IN("' . implode('","',$checked) . '")');
+							$this->_Parent->Database->delete('tbl_tracker_activity', ' `id` IN("' . implode('","',$checked) . '")');
 
-						redirect($this->_Parent->getCurrentPageURL());	
-						break;  	
+							redirect($this->_Parent->getCurrentPageURL());	
+							break;  	
+					}
 				}
 			}
 		}

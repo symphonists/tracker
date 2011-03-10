@@ -4,7 +4,7 @@ button.tracker {
 	color: #fff;
 	float:right;
 	padding: 0 1em .1em 1em;
-	margin: 0;
+	margin: 0 19px 0 0;
 	line-height: 2em;
 	height: 2em;
 	font-size: .7em;

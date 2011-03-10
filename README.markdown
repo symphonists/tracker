@@ -1,9 +1,9 @@
 # Tracker
 
-- Version: 0.9.5 beta
+- Version: 0.9.6 beta
 - Author: craig zheng
-- Build Date: 6th September 2010
-- Requirements: Symphony 2.1
+- Build Date: 9th March 2011
+- Requirements: Symphony 2.2
 
 ## Description
 
@@ -11,9 +11,11 @@ A Symphony extension that tracks user and system activity.
 
 ### Features
 
-- Tracks creations, updates, and deletes of Entries, Pages, Page Templates, Events, Data Sources, Utilities, and Sections. 
+- Tracks creations, updates, and deletes of Entries, Pages, Page Templates, Events, Data Sources, Utilities, and Sections.
+- Tracks frontend submissions via events.
 - Tracks when Preferences are changed.
 - Tracks when Extensions are enabled, disabled, or uninstalled.
+- Tracks login activity and password reset activity.
 - Provides a back-end interface for viewing and managing tracked activities.
 - Provides a data source for accessing Entry-related tracker activity from the front end.
 
@@ -34,13 +36,17 @@ The view can be filtered with GET params using the normal Symphony back-end filt
 
 **column** can be any of: `item_type`, `item_id`, `action_type`, or `user_id`. **values** can be a comma-delimited list of values to filter on. The following values are acceptable:
 
-- For **item_type**: a section id, `pages`, `events`, `datasources`, `utilities`, `sections`, `authors`, `preferences`, or `extensions`
+- For **item_type**: a section id, `pages`, `events`, `datasources`, `utilities`, `sections`, `authors`, `preferences`, `extensions`, `login`, or `password`
 - For **action_type**: `updated`, `created`, `deleted`, `enabled`, `disabled`, `uninstalled`
-- For **user_id**: an author id
+- For **user_id**: an author id, or `0` for unauthenticated/unknown users.
 
 Example:
 
 	/symphony/extension/tracker/?filter=item_type:pages,events
+	
+These query strings can also be used to filter the entries in Tracker's Dashboard panel:
+
+	item_type:1,2
 
 ### Excluding Activities
 
@@ -59,22 +65,14 @@ Configuration options are available in the data source file, but rather than edi
 - Update the `about()` method (line 28) to reflect your data source's name and other info
 - Update the sorting and filtering options (lines 10-21) to suit your needs
 
-## Beta Notes
-
-Tracker uses lots of workarounds, because delegates simply don't exist for most of the activity it tracks. You should therefore test very thoroughly before relying on it in a production environment.
-
-### Known Issues
-
-- Tracker doesn't catch when entries are deleted in the context of the Sections index (With Selected > Delete Entries). This is because the publish-delete delegate doesn't trigger.
-
 ### To Do
 
-- Track front-end submissions
 - Enable other extensions to log activities
-- Beef up the basic dashboard panel with config options
+- Beef up the filtering; allow an all-sections wildcard
 
 ## Changelog
 
+- **0.9.6** Symphony 2.2 compatibility; refactor to use new delegates
 - **0.9.5** Localization improvements and German translation (courtesy of Nils Werner)
 - **0.9.4** Dashboard panel (courtesy of Nick Dunn), Data Source tweak
 - **0.9.3** Fix section description links
