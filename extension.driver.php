@@ -814,7 +814,7 @@
 			$label = Widget::Label(__('Excluded Sections'));
 			$options = array();
 			
-			$sm = new SectionManager($this->_Parent);
+			$sm = new SectionManager(Administration::instance());
 			$sections = $sm->fetch();
 			$excluded_sections = explode(',', Symphony::Configuration()->get('excluded-sections', 'tracker'));
 
