@@ -195,7 +195,7 @@
 				$checked = @array_keys($_POST['items']);
 						
 				if(@array_key_exists('clear-all', $_POST['action'])) {
-					$sql = 'TRUNCATE `sym_tracker_activity`;';
+					$sql = 'TRUNCATE `tbl_tracker_activity`;';
 					Symphony::Database()->query($sql);
 					redirect(Administration::instance()->getCurrentPageURL());
 				}
