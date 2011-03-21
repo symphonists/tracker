@@ -813,8 +813,8 @@
 		// Excluded Sections
 			$label = Widget::Label(__('Excluded Sections'));
 			$options = array();
-			
-			$sm = new SectionManager($this->_Parent);
+		
+			$sm = new SectionManager(Symphony::Engine());
 			$sections = $sm->fetch();
 			$excluded_sections = explode(',', Symphony::Configuration()->get('excluded-sections', 'tracker'));
 
@@ -842,7 +842,7 @@
 			$label = Widget::Label(__('Excluded Users'));
 			$options = array();
 			
-			$am = new AuthorManager();
+			$am = new AuthorManager(Symphony::Engine());
 			$authors = $am->fetch();
 			$excluded_authors = explode(',',Symphony::Configuration()->get('excluded-users', 'tracker'));
 
