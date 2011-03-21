@@ -152,13 +152,13 @@
 
 				## First
 				$li = new XMLElement('li');
-				if($current_page > 1) $li->appendChild(Widget::Anchor(__('First'), $this->_Parent->getCurrentPageURL(). '?pg=1'));
+				if($current_page > 1) $li->appendChild(Widget::Anchor(__('First'), Administration::instance()->getCurrentPageURL(). '?pg=1'));
 				else $li->setValue(__('First'));
 				$ul->appendChild($li);
 
 				## Previous
 				$li = new XMLElement('li');
-				if($current_page > 1) $li->appendChild(Widget::Anchor(__('&larr; Previous'), $this->_Parent->getCurrentPageURL(). '?pg=' . ($current_page - 1)));
+				if($current_page > 1) $li->appendChild(Widget::Anchor(__('&larr; Previous'), Administration::instance()->getCurrentPageURL(). '?pg=' . ($current_page - 1)));
 				else $li->setValue(__('&larr; Previous'));
 				$ul->appendChild($li);
 
@@ -173,13 +173,13 @@
 
 				## Next
 				$li = new XMLElement('li');
-				if($current_page < $total_pages) $li->appendChild(Widget::Anchor(__('Next &rarr;'), $this->_Parent->getCurrentPageURL(). '?pg=' . ($current_page + 1)));
+				if($current_page < $total_pages) $li->appendChild(Widget::Anchor(__('Next &rarr;'), Administration::instance()->getCurrentPageURL(). '?pg=' . ($current_page + 1)));
 				else $li->setValue(__('Next &rarr;'));
 				$ul->appendChild($li);
 
 				## Last
 				$li = new XMLElement('li');
-				if($current_page < $total_pages) $li->appendChild(Widget::Anchor(__('Last'), $this->_Parent->getCurrentPageURL(). '?pg=' . $total_pages));
+				if($current_page < $total_pages) $li->appendChild(Widget::Anchor(__('Last'), Administration::instance()->getCurrentPageURL(). '?pg=' . $total_pages));
 				else $li->setValue(__('Last'));
 				$ul->appendChild($li);
 
@@ -195,18 +195,18 @@
 				$checked = @array_keys($_POST['items']);
 						
 				if(@array_key_exists('clear-all', $_POST['action'])) {
-					$sql = 'TRUNCATE `sym_tracker_activity`;';
-					$this->_Parent->Database->query($sql);
-					redirect($this->_Parent->getCurrentPageURL());
+					$sql = 'TRUNCATE `tbl_tracker_activity`;';
+					Symphony::Database()->query($sql);
+					redirect(Administration::instance()->getCurrentPageURL());
 				}
 				elseif(is_array($checked) && !empty($checked)) {
 					switch($_POST['with-selected']) {
 
 						case 'delete':
 
-							$this->_Parent->Database->delete('tbl_tracker_activity', ' `id` IN("' . implode('","',$checked) . '")');
+							Symphony::Database()->delete('tbl_tracker_activity', ' `id` IN("' . implode('","',$checked) . '")');
 
-							redirect($this->_Parent->getCurrentPageURL());	
+							redirect(Administration::instance()->getCurrentPageURL());	
 							break;  	
 					}
 				}
