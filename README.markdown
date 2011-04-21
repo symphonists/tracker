@@ -1,8 +1,8 @@
 # Tracker
 
-- Version: 0.9.6 beta
+- Version: 0.9.7 beta
 - Author: craig zheng
-- Build Date: 9th March 2011
+- Build Date: 21at April 2011
 - Requirements: Symphony 2.2
 
 ## Description
@@ -72,6 +72,7 @@ Configuration options are available in the data source file, but rather than edi
 
 ## Changelog
 
+- **0.9.7** Some accessor tweaks and other fixes
 - **0.9.6** Symphony 2.2 compatibility; refactor to use new delegates
 - **0.9.5** Localization improvements and German translation (courtesy of Nils Werner)
 - **0.9.4** Dashboard panel (courtesy of Nick Dunn), Data Source tweak
