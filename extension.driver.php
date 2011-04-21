@@ -843,7 +843,7 @@
 			$label = Widget::Label(__('Excluded Users'));
 			$options = array();
 			
-			$am = new AuthorManager(Symphony::Engine());
+			$am = new AuthorManager(Administration::instance());
 			$authors = $am->fetch();
 			$excluded_authors = explode(',',Symphony::Configuration()->get('excluded-users', 'tracker'));
 
