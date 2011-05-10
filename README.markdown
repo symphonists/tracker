@@ -1,8 +1,8 @@
 # Tracker
 
-- Version: 0.9.7 beta
+- Version: 0.9.8 beta
 - Author: craig zheng
-- Build Date: 21at April 2011
+- Build Date: 10th May 2011
 - Requirements: Symphony 2.2
 
 ## Description
@@ -70,8 +70,13 @@ Configuration options are available in the data source file, but rather than edi
 - Enable other extensions to log activities
 - Beef up the filtering; allow an all-sections wildcard
 
+### Known Issues
+
+- Doesn't track page template changes (there's no delegate for that)
+
 ## Changelog
 
+- **0.9.8** Improve extension handling (thanks Marcin Konicki), 
 - **0.9.7** Some accessor tweaks and other fixes
 - **0.9.6** Symphony 2.2 compatibility; refactor to use new delegates
 - **0.9.5** Localization improvements and German translation (courtesy of Nils Werner)
