@@ -218,11 +218,10 @@
 			}
 		// Otherwise grab the primary field value and build the entry string
 			else {
-				$data = $entry->getData();
-				$primary_field = array_shift($data);
-				$primary_field = strip_tags($primary_field['value']);
-				
-				$value = (strlen($primary_field) <= 75 ? $primary_field : substr($primary_field, 0, 75) . '...');
+				$visible_columns = $section->fetchVisibleColumns();
+				$primary_field = $visible_columns[0];
+				$data = $entry->getData($primary_field->get('id'));
+				$value = $primary_field->prepareTableValue($data);
 			
 			// If we're creating the fallback, just return a string
 				if($fallback) {
