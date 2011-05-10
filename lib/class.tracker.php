@@ -476,7 +476,12 @@
 				break;
 				
 				case "extensions":
-					$about = Administration::instance()->ExtensionManager->about($activity['item_id']);
+					try {
+						$about = Administration::instance()->ExtensionManager->about($activity['item_id']);
+					}
+					catch (Exception $e) {
+						$about = NULL;
+					}
 					if(empty($about)) {
 						$item = $activity['fallback_description'];
 					}
