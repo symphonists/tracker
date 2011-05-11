@@ -192,7 +192,6 @@
 		public function __actionIndex(){
 		
 			if(isset($_POST)) {
-				$checked = @array_keys($_POST['items']);
 						
 				if(@array_key_exists('clear-all', $_POST['action'])) {
 					$sql = 'TRUNCATE `tbl_tracker_activity`;';
@@ -200,6 +199,7 @@
 					redirect(Administration::instance()->getCurrentPageURL());
 				}
 				elseif(is_array($checked) && !empty($checked)) {
+					$checked = @array_keys($_POST['items']);
 					switch($_POST['with-selected']) {
 
 						case 'delete':
