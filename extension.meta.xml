@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension id="tracker">
+	<name>Tracker</name>
+	<description>Track user and system activity</description>
+	<repo type="github">https://github.com/czheng/tracker</repo>
+	<url type="discuss">http://symphony-cms.com/discuss/thread/49003/</url>
+	<types>
+		<type>Workflow</type>
+	</types>
+	<authors>
+		<author>
+			<name github="czheng" symphony="czheng">craig zheng</name>
+		</author>
+	</authors>
+	<media>
+		<item type="image" url="http://symphonyextensions.com/czheng/tracker/media/tracker.png">Tracker: Track user and system activity</item>
+	</media>
+	<releases>
+		<release version="0.9.9" date="2011-05-11" min="2.1.0" />
+	</releases>
+</extension>
