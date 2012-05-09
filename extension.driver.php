@@ -947,7 +947,7 @@
 					}
 
 					Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/tracker/assets/' . 'dashboard.css', 'screen', 151);
-					$logs = Tracker::fetchActivities($filters, (int)$config['limit'], 1);
+					$logs = Tracker::fetchActivities($filters, (int)$config['limit'], 0);
 
 					$thead = array(
 						array(__('Activity'), 'col'),
