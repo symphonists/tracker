@@ -6,8 +6,6 @@
 	
 		public function view() {
 		
-			$this->addStylesheetToHead(URL . '/extensions/tracker/assets/' . 'tracker.index.css', 'screen', 150);
-		
 		// Start building the page
 			$this->setPageType('index');
 			$this->setTitle(
@@ -118,17 +116,14 @@
 			$this->Form->appendChild($table);
 			
 		// Append table actions
-			$tableActions = new XMLElement('div');
-			$tableActions->setAttribute('class', 'actions');
-			
 			$options = array(
 				array(null, false, __('With Selected...')),
 				array('delete', false, __('Delete'))							
 			);
-			
-			$tableActions->appendChild(Widget::Select('with-selected', $options));
-			$tableActions->appendChild(Widget::Input('action[apply]', __('Apply'), 'submit'));
-			
+
+			$tableActions = new XMLElement('div');
+			$tableActions->setAttribute('class', 'actions');
+			$tableActions->appendChild(Widget::Apply($options));
 			$this->Form->appendChild($tableActions);
 			
 		// Append pagination
