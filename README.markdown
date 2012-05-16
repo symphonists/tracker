@@ -1,10 +1,5 @@
 # Tracker
 
-- Version: 0.9.9 beta
-- Author: craig zheng
-- Build Date: 11th May 2011
-- Requirements: Symphony 2.2
-
 ## Description
 
 A Symphony extension that tracks user and system activity.
@@ -73,16 +68,3 @@ Configuration options are available in the data source file, but rather than edi
 ### Known Issues
 
 - Doesn't track page template changes (there's no delegate for that)
-
-## Changelog
-
-- **0.9.9** Fix "clear all" bug and entry description bug
-- **0.9.8** Improve extension handling (thanks Marcin Konicki), 
-- **0.9.7** Some accessor tweaks and other fixes
-- **0.9.6** Symphony 2.2 compatibility; refactor to use new delegates
-- **0.9.5** Localization improvements and German translation (courtesy of Nils Werner)
-- **0.9.4** Dashboard panel (courtesy of Nick Dunn), Data Source tweak
-- **0.9.3** Fix section description links
-- **0.9.2** Sanitize and trim an Entry's primary field ebfore using
-- **0.9.1** Silently ignore unknown activities (e.g. from other extensions)
-- **0.9** Initial build
