@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="tracker">
+<extension id="tracker" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
 	<name>Tracker</name>
 	<description>Track user and system activity</description>
 	<repo type="github">https://github.com/czheng/tracker</repo>
