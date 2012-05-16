@@ -217,8 +217,7 @@
 			}
 		// Otherwise grab the primary field value and build the entry string
 			else {
-				$visible_columns = $section->fetchVisibleColumns();
-				$primary_field = $visible_columns[0];
+				$primary_field = reset($section->fetchVisibleColumns());
 				$data = $entry->getData($primary_field->get('id'));
 				$value = $primary_field->prepareTableValue($data);
 			
