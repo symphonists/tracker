@@ -203,8 +203,7 @@
 		public function formatEntryItem($activity, $fallback=FALSE) {
 		
 		// Fetch the entry and its section
-			$entryManager = new EntryManager($context['parent']);
-			$entry = $entryManager->fetch($activity['item_id']);
+			$entry = EntryManager::fetch($activity['item_id']);
 			$entry = $entry[0];
 			$section = SectionManager::fetch($activity['item_type']);
 		
@@ -275,9 +274,6 @@
 		}
 		
 		public function formatElementItem($activity, $fallback=FALSE){
-			$sectionManager = new SectionManager($context['parent']);
-			$eventManager = new EventManager($context['parent']);
-			$dsManager = new DatasourceManager($context['parent']);
 			
 			switch($activity['item_type']) {
 			
@@ -327,8 +323,8 @@
 				case "events":
 				
 				// Grab the event info
-					$handle = $eventManager->__getHandleFromFilename($activity['item_id']);
-					$about = $eventManager->about($handle);
+					$handle = EventManager::__getHandleFromFilename($activity['item_id']);
+					$about = EventManager::about($handle);
 				
 				// If the event no longer exists, use the fallback description
 					if(empty($about)) {
@@ -351,8 +347,8 @@
 				case "datasources":
 				
 				// Grab the DS info
-					$handle = $dsManager->__getHandleFromFilename($activity['item_id']);
-					$about = $dsManager->about($handle);
+					$handle = DatasourceManager::__getHandleFromFilename($activity['item_id']);
+					$about = DatasourceManager::about($handle);
 					
 				// If the DS no longer exists, use the fallback description
 					if(empty($about)) {
@@ -395,7 +391,7 @@
 				case "sections":
 				
 				// Grab the section info
-					$section = $sectionManager->fetch($activity['item_id']);
+					$section = SectionManager::fetch($activity['item_id']);
 				
 				// If the section no longer exists, use the fallback description	
 					if(!($section instanceof Section)) {
@@ -476,7 +472,7 @@
 				
 				case "extensions":
 					try {
-						$about = Administration::instance()->ExtensionManager->about($activity['item_id']);
+						$about = ExtensionManager::about($activity['item_id']);
 					}
 					catch (Exception $e) {
 						$about = NULL;
