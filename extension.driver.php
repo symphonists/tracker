@@ -262,9 +262,6 @@
 				 * on if you're deleting or not. So standardize them.
 				 */
 				if($action == 'deleted') {
-					include_once(TOOLKIT . '/class.entrymanager.php');
-					$em = new EntryManager(Symphony::Engine());
-					
 					$ids = (array) $context['entry_id'];
 				}
 				else {
@@ -278,7 +275,8 @@
 				foreach($ids as $entry_id) {
 					
 					if(!isset($section_id)) {
-						$section_id = $em->fetchEntrySectionID($entry_id);
+						include_once(TOOLKIT . '/class.entrymanager.php');
+						$section_id = EntryManager::fetchEntrySectionID($entry_id);
 					}
 					
 					if($this->validateSection($section_id)) {
@@ -496,20 +494,8 @@
 					 * doesn't have an ID for some reason.
 					 */
 					if($action == 'created') {
-						/**
-						* Won't work until 2.2.1 when commit b129848
-						* is pulled in.
-						*
-						
 						require_once(TOOLKIT . '/class.authormanager.php');
-						$am = new AuthorManager(Symphony::Engine());
-						$author = $am->fetchByUsername($context['author']->get('username'));
-						
-						*
-						* Meantime use the deprecated Author method
-						*/
-						$context['author']->loadAuthorFromUsername($context['author']->get('username'));
-						$author = $context['author'];
+						$author = AuthorManager::fetchByUsername($context['author']->get('username'));
 						$ids = (array) $author->get('id');
 					}
 					else {
