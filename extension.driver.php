@@ -54,7 +54,7 @@
 				),
 				array(
 					'page' 		=> '/publish/',
-					'delegate'	=> 'Delete',
+					'delegate'	=> 'EntryPostDelete',
 					'callback'	=> 'parseEntryAction'
 				),
 				array(
