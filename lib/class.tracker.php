@@ -23,10 +23,10 @@
 			}
 			else {
 				if(is_numeric($item_type)) {
-					$username = 'A front-end user';
+					$username = __('A front-end user');
 				}
 				else {
-					$username = 'An unidentified user (' . $item_id . ')';
+					$username = __('An unidentified user (%s)', array($item_id));
 				}
 			}
 			
@@ -184,7 +184,7 @@
 			
 		// Concat author string, activity type, and an item description
 			if(!is_null($item)) {
-				$template = sprintf('%%1$s %s %%2$s.', $activity['action_type']);
+				$template = __('%%1$s %s %%2$s.', array(__($activity['action_type'])));
 				
 				$template = __($template);
 				

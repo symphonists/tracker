@@ -3,19 +3,6 @@
 	require_once(EXTENSIONS . '/tracker/lib/class.tracker.php');
 
 	class Extension_Tracker extends Extension {
-
-		public function about() {
-			return array(
-				'name'			=> 'Tracker',
-				'version'		=> '0.9.9',
-				'release-date'	=> '2011-05-11',
-				'author'		=> array(
-					'name'			=> 'craig zheng',
-					'email'			=> 'craig@symphony-cms.com'
-				),
-				'description'	=> 'Track user and system activity.'
-			);
-		}
 		
 		public function fetchNavigation() {
 			return array(
@@ -261,7 +248,7 @@
 				 * Entry IDs are provided in different formats depending
 				 * on if you're deleting or not. So standardize them.
 				 */
-				if($action == 'deleted') {
+				if($action == __('deleted')) {
 					$ids = (array) $context['entry_id'];
 				}
 				else {
@@ -301,10 +288,10 @@
 				 * otherwise, it's new.
 				 */
 				if(!empty($_POST['id'])) {
-					$action = 'updated';
+					$action = __('updated');
 				}
 				else {
-					$action = 'created';
+					$action = __('created');
 				}
 				
 				/**
@@ -493,7 +480,7 @@
 					 * Workaround because the Author object returned by the delegate
 					 * doesn't have an ID for some reason.
 					 */
-					if($action == 'created') {
+					if($action == __('created')) {
 						require_once(TOOLKIT . '/class.authormanager.php');
 						$author = AuthorManager::fetchByUsername($context['author']->get('username'));
 						$ids = (array) $author->get('id');
@@ -554,7 +541,7 @@
 				Tracker::log(
 					'preferences',
 					NULL,
-					'updated',
+					__('updated'),
 					$this->getAuthorID(),
 					$this->getTimestamp()
 				);
@@ -568,7 +555,7 @@
 					Tracker::log(
 						'maintenance-mode',
 						NULL,
-						($context['settings']['maintenance_mode']['enabled'] == 'yes' ? 'enabled' : 'disabled'),
+						($context['settings']['maintenance_mode']['enabled'] == 'yes' ? __('enabled') : __('disabled')),
 						$this->getAuthorID(),
 						$this->getTimestamp()
 					);
@@ -611,10 +598,10 @@
 				}
 
 				if(stripos($context['delegate'], 'success')) {
-					$action = 'logged in';
+					$action = __('logged in');
 				}
 				else {
-					$action = 'attempted to log in';
+					$action = __('attempted to log in');
 				}
 				
 				Tracker::log(
@@ -635,19 +622,19 @@
 				 */
 				switch($context['delegate']) {
 					case 'AuthorPostPasswordResetSuccess':
-						$action = 'reset';
+						$action = __('reset');
 					break;
 				
 					case 'AuthorPostPasswordResetFailure':
-						$action = 'attempted to reset';
+						$action = __('attempted to reset');
 					break;
 				
 					case 'AuthorPostPasswordChange':
-						$action = 'changed';
+						$action = __('changed');
 					break;
 				
 					case 'AuthorPostPasswordResetRequest':
-						$action = 'requested to reset';
+						$action = __('requested to reset');
 					break;
 				}
 		
@@ -655,7 +642,7 @@
 				 * If the user's unknown, set ID to 0 and store their
 				 * email.
 				 */
-				if($action == 'attempted to reset') {
+				if($action == __('attempted to reset')) {
 					$account = 0;
 					$item = $context['email'];
 				}
@@ -691,22 +678,22 @@
 		
 		public function getActionFromDelegateName($name) {
 			if(stripos($name,'edit')) {
-				return 'updated';
+				return __('updated');
 			}
 			elseif(stripos($name,'create')) {
-				return 'created';
+				return __('created');
 			}
 			elseif(stripos($name,'delete') !== FALSE) { // Because Delete delegate returns 0
-				return 'deleted';
+				return __('deleted');
 			}
 			elseif(stripos($name,'enable')) {
-				return 'enabled';
+				return __('enabled');
 			}
 			elseif(stripos($name,'disable')) {
-				return 'disabled';
+				return __('disabled');
 			}
 			elseif(stripos($name,'uninstall')) {
-				return 'uninstalled';
+				return __('uninstalled');
 			}
 		}
 		
@@ -1001,6 +988,5 @@
 			}
 			
 		}
-		
 
 	}
