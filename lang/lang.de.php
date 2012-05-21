@@ -59,7 +59,7 @@
 		' das Benutzerkonto von %s',
 
 		' to the back end' => 
-		' im Backend',
+		' sich im Backend',
 
 		'%%1$s %s %%2$s.' => 
 		'%%1$s hat %%2$s %s.',
@@ -113,7 +113,7 @@
 		'Fährtenleser',
 
 		'attempted to log in' => 
-		'versucht sich anzumelden',
+		'versucht anzumelden',
 
 		'attempted to reset' => 
 		'versucht zurückzusetzen',
@@ -137,7 +137,7 @@
 		'aktiviert',
 
 		'logged in' => 
-		'sich angemeldet',
+		'angemeldet',
 
 		'requested to reset' => 
 		'die Rücksetzung beantragt',
