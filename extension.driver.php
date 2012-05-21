@@ -565,32 +565,17 @@
 		
 		public function parseLogin($context) {
 			if($this->validateElement('login')){
-				
-				/**
-				* Won't work until 2.2.1 when commit b129848
-				* is pulled in.
-				*
-				
-				require_once(TOOLKIT . '/class.authormanager.php');
-				$am = new AuthorManager(Symphony::Engine());
-				$author = $am->fetchByUsername($context['author']->get('username'));
-				
-				*
-				* Meantime use the deprecated Author method
-				*/
-				$author = new Author;
-				$author->loadAuthorFromUsername($context['username']);
 				$item = NULL;
 				
 				/**
 				 * Set author ID. If author doesn't exist, store the IP
 				 * address.
 				 */
-				if($author->get('id')) {
-					if(!$this->validateUser($author->get('id'))) {
+				if(Symphony::Engine()->Author) {
+					if(!$this->validateUser(Symphony::Engine()->Author->get('id'))) {
 						return;
 					}
-					$account = $author->get('id');
+					$account = Symphony::Engine()->Author->get('id');
 				}
 				else {
 					$account = 0;
