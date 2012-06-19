@@ -30,9 +30,7 @@
 				}
 			}
 			
-			/**
-			 * Build the $data array for our table columns
-			 */
+			// Build the $data array for our table columns
 			$data = array(
 				'item_type'				=> $item_type,
 				'item_id'				=> $item_id,
@@ -54,22 +52,16 @@
 				$data['fallback_description'] = Tracker::formatElementItem($data, TRUE);
 			}
 			
-			/**
-			 * Push it into the DB.
-			 */
+			// Push it into the DB.
 			Symphony::Database()->insert($data, 'tbl_tracker_activity');
 		}
 		
 		public function fetchActivities(array $filters,$limit=NULL,$start=0,$sort='timestamp',$order='DESC') {
 		
-			/**
-			 * Build the filter SQL.
-			 */
+			// Build the filter SQL.
 			$filter_sql = Tracker::buildFilterSQL($filters);
 		
-			/**
-			 * Run the query.
-			 */
+			// Run the query.
 			$activities = Symphony::Database()->fetch('
 				SELECT
 					*
@@ -110,7 +102,7 @@
 		 * 			'item_type' => 'REGEXP "[[:digit:]]+"'
 		 * 		);
 		 *
-		**/
+		 */
 		public function buildFilterSQL($filters) {
 		
 			$columns = Symphony::Database()->fetch('DESCRIBE `tbl_tracker_activity`');
@@ -120,32 +112,30 @@
 			
 			$filter_sql = '';
 			
-		// If we've got a $filters array, let's build the SQL
-		// TODO: I imagine this can be made more elegant
-		
+			// If we've got a $filters array, let's build the SQL
+			// TODO: I imagine this can be made more elegant
 			if(!empty($filters) && is_array($filters)) {
 				$filter_sql .= ' WHERE ';
 				$i = 0;
 				
-			// Iterate over the field filters
+				// Iterate over the field filters
 				foreach($filters as $field => $options) {
 				
-				// Prevent fatal error when filter field doesn't exist
+					// Prevent fatal error when filter field doesn't exist
 					if(!in_array($field,$columns)) { return; }
 				
-				// If there's more than one field filter
+					// If there's more than one field filter
 					if($i > 0) {
 						$filter_sql .= ' AND ';
 					}
 				
-				// Allow custom SQL by passing a string
-				// TODO: Is this a security concern?
-				
+					// Allow custom SQL by passing a string
+					// TODO: Is this a security concern?
 					if(!is_array($options)) {
 						$filter_sql .= '`' . $field . '` ' . $options . ' ';
 					}
 					
-				// Iterate over the filter values and group them with OR
+					// Iterate over the filter values and group them with OR
 					else {
 						foreach($options as $num => $option) {
 							if($num == 0 && count($options) > 1) {
@@ -174,15 +164,17 @@
 				$activity['fallback_username']
 			);
 			
-		// If the item type is numeric, we're dealing with an entry
+			// If the item type is numeric, we're dealing with an entry
 			if(is_numeric($activity['item_type'])) {
 				$item = Tracker::formatEntryItem($activity);
-			} else {
-		// Otherwise, it's a system element
+			} 
+
+			// Otherwise, it's a system element			
+			else {
 				$item = Tracker::formatElementItem($activity);
 			}
 			
-		// Concat author string, activity type, and an item description
+			// Concat author string, activity type, and an item description
 			if(!is_null($item)) {
 				$template = __('%%1$s %s %%2$s.', array(__($activity['action_type'])));
 				
@@ -202,12 +194,12 @@
 		
 		public function formatEntryItem($activity, $fallback=FALSE) {
 		
-		// Fetch the entry and its section
+			// Fetch the entry and its section
 			$entry = EntryManager::fetch($activity['item_id']);
 			$entry = $entry[0];
 			$section = SectionManager::fetch($activity['item_type']);
 		
-		// If the entry no longer exists, get the fallback entry description
+			// If the entry no longer exists, get the fallback entry description
 			if(!($entry instanceof Entry) || !($section instanceof Section)) {
 			 	$entry_string = explode(
 			 		':::',
@@ -215,17 +207,19 @@
 			 	);
 			 	$entry_string = '"' . $entry_string[0] . '"';
 			}
-		// Otherwise grab the primary field value and build the entry string
+		
+			// Otherwise grab the primary field value and build the entry string
 			else {
 				$primary_field = reset($section->fetchVisibleColumns());
 				$data = $entry->getData($primary_field->get('id'));
 				$value = $primary_field->prepareTableValue($data);
 			
-			// If we're creating the fallback, just return a string
+				// If we're creating the fallback, just return a string
 				if($fallback) {
 					$entry_string = $value;
 				}
-			// Otherwise build a link to the entry
+			
+				// Otherwise build a link to the entry
 				else {				
 					$entry_string = Widget::Anchor(
 						$value,
@@ -234,7 +228,7 @@
 				}
 			}
 			
-		// If the section no longer exists, get the fallback section description
+			// If the section no longer exists, get the fallback section description
 			if(!($section instanceof Section)) {
 				$section_string = explode(
 					':::',
@@ -242,11 +236,13 @@
 				);
 				$section_string = $section_string[1];
 			}
-		// Otherwise build a fallback
+	
+			// Otherwise build a fallback
 			elseif($fallback) {
 				$section_string = $section->get('name');
 			} 
-		// Or build a link to the section
+	
+			// Or build a link to the section
 			else {
 				$section_string = Widget::Anchor(
 					$section->get('name'),
@@ -254,11 +250,12 @@
 				)->generate();
 			}
 			
-		// Use a unique delimiter for the fallback so we can fetch each string independently
+			// Use a unique delimiter for the fallback so we can fetch each string independently
 			if($fallback) {
 				$item = $entry_string . ':::' . $section_string;
 			}
-		// Or build the full description with links
+	
+			// Or build the full description with links
 			else {
 				$item = __(
 					' %1s in the %2s section',
@@ -276,24 +273,25 @@
 			
 			switch($activity['item_type']) {
 			
-			// Pages and Page Templates
+				// Pages and Page Templates
 				case 'pages':
 				
-				// Is is a Page Template?
+					// Is is a Page Template?
 					$is_template = !is_numeric($activity['item_id']);
 				
-				// Fetch the page from the DB
+					// Fetch the page from the DB
 					$page = Symphony::Database()->fetch('
 						SELECT `title`
 						FROM `tbl_pages`
 						WHERE `' . ($is_template ? 'handle' : 'id') . '` = "' . $activity['item_id'] . '"'
 					);
 				
-				// If the page no longer exists, use the fallback description
+					// If the page no longer exists, use the fallback description
 					if(empty($page)) {
 						$item = $activity['fallback_description'];
 					}
-				// Otherwise, if it was the template that was edited, build a description
+				
+					// Otherwise, if it was the template that was edited, build a description
 					elseif($is_template) {
 						$item = __(
 							' the %1s page %2s',
@@ -305,7 +303,8 @@
 								)->generate())
 							)
 						);
-				// Or if it was the page config, build that description
+			
+					// Or if it was the page config, build that description
 					} else {
 						$item = __(
 							' the %1s page',
@@ -321,15 +320,16 @@
 					
 				case "events":
 				
-				// Grab the event info
+					// Grab the event info
 					$handle = EventManager::__getHandleFromFilename($activity['item_id']);
 					$about = EventManager::about($handle);
 				
-				// If the event no longer exists, use the fallback description
+					// If the event no longer exists, use the fallback description
 					if(empty($about)) {
 						$item = $activity['fallback_description'];
 					}
-				// Otherwise, build the description
+			
+					// Otherwise, build the description
 					else {
 						$item = __(
 							' the %1s event',
@@ -345,15 +345,16 @@
 					
 				case "datasources":
 				
-				// Grab the DS info
+					// Grab the DS info
 					$handle = DatasourceManager::__getHandleFromFilename($activity['item_id']);
 					$about = DatasourceManager::about($handle);
 					
-				// If the DS no longer exists, use the fallback description
+					// If the DS no longer exists, use the fallback description
 					if(empty($about)) {
 						$item = $activity['fallback_description'];
 					}
-				// Otherwise, build the item description
+			
+					// Otherwise, build the item description
 					else {
 						$item = __(
 							' the %1s data source',
@@ -369,11 +370,12 @@
 					
 				case "utilities":
 				
-				// If the utility no longer exists, use the fallback description
+					// If the utility no longer exists, use the fallback description
 					if(!file_exists(UTILITIES . '/' . $activity['item_id'])) {
 						$item = $activity['fallback_description'];
 					}
-				// Otherwise, build a description
+		
+					// Otherwise, build a description
 					else {
 						$item = __(
 							' the %1s utility',
@@ -389,14 +391,15 @@
 					
 				case "sections":
 				
-				// Grab the section info
+					// Grab the section info
 					$section = SectionManager::fetch($activity['item_id']);
 				
-				// If the section no longer exists, use the fallback description	
+					// If the section no longer exists, use the fallback description	
 					if(!($section instanceof Section)) {
 						$item = $activity['fallback_description'];
 					}
-				// Otherwise build a description
+				
+					// Otherwise build a description
 					else {
 						$item = __(
 							' the %1s section',
@@ -413,17 +416,18 @@
 					
 				case "authors":
 				
-				// Grab the author info
+					// Grab the author info
 					$author = AuthorManager::fetchByID($activity['item_id']);
 					
-				// If the author no longer exists, use the fallback description
+					// If the author no longer exists, use the fallback description
 					if(!($author instanceof Author)) {
 						$item = $activity['fallback_description'];
 					}
-				// Otherwise, build the description
+		
+					// Otherwise, build the description
 					else  {
 						
-					// If the author edited their own record
+						// If the author edited their own record
 						if($activity['user_id'] == $activity['item_id']) {
 							$item = __(
 								' his/her %1s',
@@ -435,7 +439,8 @@
 								)
 							);
 						}
-					// If it's another person's author record
+			
+						// If it's another person's author record
 						else {
 							$item = __(
 								' the author record for %1s',
@@ -506,14 +511,17 @@
 		}
 		
 		public function formatAuthorString($id, $username) {
-		// Get author info
+		
+			// Get author info
 			$author = AuthorManager::fetchByID($id);
 			
-		// If the author no longer exists, use the fallback name
+	
+			// If the author no longer exists, use the fallback name
 			if(!($author instanceof Author)) {
 				$author_string = $username;
 			}
-		// Otherwise generate a link to the author record
+	
+			// Otherwise generate a link to the author record
 			else {
 				$author_string = Widget::Anchor(
 					$author->getFullName(),
