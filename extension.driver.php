@@ -252,7 +252,7 @@
 
 				// Entry IDs are provided in different formats depending
 				// on if you're deleting or not. So standardize them.
-				if($action == __('deleted')) {
+				if($action == 'deleted') {
 					$ids = (array) $context['entry_id'];
 				}
 				else {
@@ -288,10 +288,10 @@
 				// If the ID's been passed, we're updating an existing entry,
 				// otherwise, it's new.
 				if(!empty($_POST['id'])) {
-					$action = __('updated');
+					$action = 'updated';
 				}
 				else {
-					$action = __('created');
+					$action = 'created';
 				}
 				
 				// Logged-in author, or anonymous front-end user?
@@ -449,7 +449,7 @@
 				
 					// Workaround because the Author object returned by the delegate
 					// doesn't have an ID for some reason.
-					if($action == __('created')) {
+					if($action == 'created') {
 						require_once(TOOLKIT . '/class.authormanager.php');
 						$author = AuthorManager::fetchByUsername($context['author']->get('username'));
 						$ids = (array) $author->get('id');
@@ -503,7 +503,7 @@
 				Tracker::log(
 					'preferences',
 					NULL,
-					__('updated'),
+					'updated',
 					$this->getAuthorID(),
 					$this->getTimestamp()
 				);
@@ -515,7 +515,7 @@
 					Tracker::log(
 						'maintenance-mode',
 						NULL,
-						($context['settings']['maintenance_mode']['enabled'] == 'yes' ? __('enabled') : __('disabled')),
+						($context['settings']['maintenance_mode']['enabled'] == 'yes' ? 'enabled' : 'disabled'),
 						$this->getAuthorID(),
 						$this->getTimestamp()
 					);
@@ -541,10 +541,10 @@
 				}
 
 				if(stripos($context['delegate'], 'success')) {
-					$action = __('logged in');
+					$action = 'logged in';
 				}
 				else {
-					$action = __('attempted to log in');
+					$action = 'attempted to log in';
 				}
 				
 				Tracker::log(
@@ -563,24 +563,24 @@
 				// Use delegate name to determine action
 				switch($context['delegate']) {
 					case 'AuthorPostPasswordResetSuccess':
-						$action = __('reset');
+						$action = 'reset';
 					break;
 				
 					case 'AuthorPostPasswordResetFailure':
-						$action = __('attempted to reset');
+						$action = 'attempted to reset';
 					break;
 				
 					case 'AuthorPostPasswordChange':
-						$action = __('changed');
+						$action = 'changed';
 					break;
 				
 					case 'AuthorPostPasswordResetRequest':
-						$action = __('requested to reset');
+						$action = 'requested to reset';
 					break;
 				}
 		
 				// If the user's unknown, set ID to 0 and store their email.
-				if($action == __('attempted to reset')) {
+				if($action == 'attempted to reset') {
 					$account = 0;
 					$item = $context['email'];
 				}
@@ -616,22 +616,22 @@
 		
 		public function getActionFromDelegateName($name) {
 			if(stripos($name,'edit')) {
-				return __('updated');
+				return 'updated';
 			}
 			elseif(stripos($name,'create')) {
-				return __('created');
+				return 'created';
 			}
 			elseif(stripos($name,'delete') !== FALSE) { // Because Delete delegate returns 0
-				return __('deleted');
+				return 'deleted';
 			}
 			elseif(stripos($name,'enable')) {
-				return __('enabled');
+				return 'enabled';
 			}
 			elseif(stripos($name,'disable')) {
-				return __('disabled');
+				return 'disabled';
 			}
 			elseif(stripos($name,'uninstall')) {
-				return __('uninstalled');
+				return 'uninstalled';
 			}
 		}
 		
