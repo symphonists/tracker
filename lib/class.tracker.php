@@ -182,7 +182,6 @@
 				
 				// Don't merge description so make sure each string can be translated accurately:
 				// this is important if other languages need reflexive or splitted verbs (like German for example)
-				verbs are reflexive or use two words for a single English
 				switch($activity['action_type']) {
 				
 					case 'deleted':
