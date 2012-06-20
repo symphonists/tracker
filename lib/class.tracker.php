@@ -158,7 +158,6 @@
 		}
 		
 		public function getDescription(array $activity) {
-		
 			$author_string = Tracker::formatAuthorString(
 				$activity['user_id'],
 				$activity['fallback_username']
@@ -176,20 +175,75 @@
 			
 			// Concat author string, activity type, and an item description
 			if(!is_null($item)) {
-				$template = __('%%1$s %s %%2$s.', array(__($activity['action_type'])));
-				
-				$template = __($template);
-				
-				$description = __(
-					$template,
-					array(
-						$author_string,
-						$item
-					) 
+				$replacements = array(
+					$author_string,
+					$item
 				);
+				
+				// Don't merge description so make sure each string can be translated accurately:
+				// this is important if other languages need reflexive or splitted verbs (like German for example)
+				verbs are reflexive or use two words for a single English
+				switch($activity['action_type']) {
+				
+					case 'deleted':
+						$description = __('%1$s deleted %2$s.', $replacements);
+						break;
+				
+					case 'updated':
+						$description = __('%1$s updated %2$s.', $replacements);
+						break;
+				
+					case 'created':
+						$description = __('%1$s created %2$s.', $replacements);
+						break;
+				
+					case 'enabled':
+						$description = __('%1$s enabled %2$s.', $replacements);
+						break;
+				
+					case 'disabled':
+						$description = __('%1$s disabled %2$s.', $replacements);
+						break;
+				
+					case 'logged in':
+						$description = __('%1$s logged in %2$s.', $replacements);
+						break;
+				
+					case 'attempted to log in':
+						$description = __('%1$s attempted to log in %2$s.', $replacements);
+						break;
+				
+					case 'reset':
+						$description = __('%1$s reset %2$s.', $replacements);
+						break;
+				
+					case 'attempted to reset':
+						$description = __('%1$s attempted to reset %2$s.', $replacements);
+						break;
+				
+					case 'changed':
+						$description = __('%1$s changed %2$s.', $replacements);
+						break;
+				
+					case 'requested to reset':
+						$description = __('%1$s requested to reset %2$s.', $replacements);
+						break;
+				
+					case 'uninstalled':
+						$description = __('%1$s uninstalled %2$s.', $replacements);
+						break;
+						
+					default:
+						$description = __('%1$s %2$s %3$s.', array(
+							$author_string,
+							$activity['action_type'],
+							$item
+						));
+						break;
+				}
+
 				return $description;
 			}
-
 		}
 		
 		public function formatEntryItem($activity, $fallback=FALSE) {

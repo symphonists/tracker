@@ -14,7 +14,7 @@
 				'website' => 'http://nilshoerrmann.de'
 			),		
 		),
-		'release-date' => '2012-05-18'
+		'release-date' => '2012-06-20'
 	);
 
 	/**
@@ -61,8 +61,32 @@
 		' to the back end' => 
 		' sich im Backend',
 
-		'%%1$s %s %%2$s.' => 
-		'%%1$s hat %%2$s %s.',
+		'%1$s %2$s %3$s.' => 
+		'%1$s %2$s %3$s.',
+
+		'%1$s attempted to reset %2$s.' => 
+		'%1$s hat versucht %2$s zurückzusetzen.',
+
+		'%1$s created %2$s.' => 
+		'%1$s hat %2$s erstellt.',
+
+		'%1$s deleted %2$s.' => 
+		'%1$s hat %2$s gelöscht.',
+
+		'%1$s disabled %2$s.' => 
+		'%1$s hat %2$s deaktiviert.',
+
+		'%1$s enabled %2$s.' => 
+		'%1$s hat %2$s aktiviert.',
+
+		'%1$s reset %2$s.' => 
+		'%1$s hat %2$s zurückgesetzt.',
+
+		'%1$s uninstalled %2$s.' => 
+		'%1$s hat %2$s deinstalliert.',
+
+		'%1$s updated %2$s.' => 
+		'%1$s hat %2$s aktualisiert.',
 
 		'A front-end user' => 
 		'Ein Webseitenbesucher',
@@ -112,38 +136,8 @@
 		'Tracker Activity' => 
 		'Fährtenleser',
 
-		'attempted to log in' => 
-		'versucht anzumelden',
-
-		'attempted to reset' => 
-		'versucht zurückzusetzen',
-
 		'author record' => 
 		'Benutzerkonto',
-
-		'changed' => 
-		'geändert',
-
-		'created' => 
-		'erstellt',
-
-		'deleted' => 
-		'gelöscht',
-
-		'disabled' => 
-		'deaktiviert',
-
-		'enabled' => 
-		'aktiviert',
-
-		'logged in' => 
-		'angemeldet',
-
-		'requested to reset' => 
-		'die Rücksetzung beantragt',
-
-		'reset' => 
-		'zurückgesetzt',
 
 		'system preferences' => 
 		'System-Einstellungen',
@@ -154,10 +148,16 @@
 		'the %1s extension' => 
 		'die Erweiterung %s',
 
-		'uninstalled' => 
-		'deinstalliert',
+		'%1$s logged in %2$s.' => 
+		'%1$s hat sich %2$s angemeldet.',
 
-		'updated' => 
-		'aktualisiert',
+		'%1$s attempted to log in %2$s.' => 
+		'%1$s hat versucht sich %2$s anzumelden.',
+
+		'%1$s changed %2$s.' => 
+		'%1$s hat %2$s geändert.',
+
+		'%1$s requested to reset %2$s.' => 
+		'%1$s hat die Rücksetzung %2$s angefordert.',
 
 	);
