@@ -6,7 +6,7 @@
 	
 		public function view() {
 		
-		// Start building the page
+			// Start building the page
 			$this->setPageType('index');
 			$this->setTitle(
 				__('%1$s &ndash; %2$s',
@@ -16,7 +16,7 @@
 				))
 			);
 			
-		// Add a button to clear all activity
+			// Add a button to clear all activity
 			$clearform = new XMLElement('form');
 			$clearform->setAttribute('method','post');
 			$clearform->setAttribute('action',Symphony::Engine()->getCurrentPageURL());
@@ -30,12 +30,12 @@
 				$clearform
 			);
 		
-		// Build pagination, sorting, and limiting info
+			// Build pagination, sorting, and limiting info
 			$current_page = (isset($_REQUEST['pg']) && is_numeric($_REQUEST['pg']) ? max(1, intval($_REQUEST['pg'])) : 1);
 			$start = (max(1, $current_page) - 1) * Symphony::Configuration()->get('pagination_maximum_rows', 'symphony');
 			$limit = Symphony::Configuration()->get('pagination_maximum_rows', 'symphony');
 			
-		// Build filter info
+			// Build filter info
 			$filters = array();
 			
 			if(isset($_REQUEST['filter'])){
@@ -49,10 +49,10 @@
 				}
 			}
 		
-		// Fetch activity logs
+			// Fetch activity logs
 			$logs = Tracker::fetchActivities($filters, $limit, $start);
 			
-		// Build the table
+			// Build the table
 			$thead = array(
 				array(__('Activity'), 'col'),
 				array(__('Date'), 'col'),
@@ -60,7 +60,7 @@
 			);
 			$tbody = array();
 
-		// If there are no logs, display default message
+			// If there are no logs, display default message
 			if (!is_array($logs) or empty($logs)) {
 				$tbody = array(Widget::TableRow(array(
 					Widget::TableData(
@@ -73,13 +73,13 @@
 				);
 			}
 		
-		// Otherwise, build table rows
+			// Otherwise, build table rows
 			else {
 				$bOdd = true;
 				
 				foreach ($logs as $activity) {
 				
-				// Format the date and time
+					// Format the date and time
 					$date = DateTimeObj::get(
 						__SYM_DATE_FORMAT__,
 						strtotime($activity['timestamp'] . ' GMT')
@@ -91,14 +91,14 @@
 					
 					$description = Tracker::getDescription($activity);
 
-				// Assemble the columns
+					// Assemble the columns
 					$col_date = Widget::TableData($date);
 					$col_time = Widget::TableData($time);
 					$col_desc = Widget::TableData($description);
 					
 					$col_desc->appendChild(Widget::Input("items[{$activity['id']}]", null, 'checkbox'));
 					
-				// Insert the row
+					// Insert the row
 					if(!is_null($description)) {
 						$tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : NULL));
 					
@@ -107,7 +107,7 @@
 				}
 			}
 			
-		// Assemble the table
+			// Assemble the table
 			$table = Widget::Table(
 				Widget::TableHead($thead), null,
 				Widget::TableBody($tbody), null
@@ -115,7 +115,7 @@
 			$table->setAttribute('class','selectable');
 			$this->Form->appendChild($table);
 			
-		// Append table actions
+			// Append table actions
 			$options = array(
 				array(null, false, __('With Selected...')),
 				array('delete', false, __('Delete'))							
@@ -126,8 +126,7 @@
 			$tableActions->appendChild(Widget::Apply($options));
 			$this->Form->appendChild($tableActions);
 			
-		// Append pagination
-		
+			// Append pagination
 			$filter_sql = Tracker::buildFilterSQL($filters);
 			$sql = '
 				SELECT count(id) as `count`
@@ -141,23 +140,22 @@
 			$remaining_pages = max(0, $total-pages - $current_page);
 			
 			if($total_pages > 1){
-
 				$ul = new XMLElement('ul');
 				$ul->setAttribute('class', 'page');
 
-				## First
+				// First
 				$li = new XMLElement('li');
 				if($current_page > 1) $li->appendChild(Widget::Anchor(__('First'), Administration::instance()->getCurrentPageURL(). '?pg=1'));
 				else $li->setValue(__('First'));
 				$ul->appendChild($li);
 
-				## Previous
+				// Previous
 				$li = new XMLElement('li');
 				if($current_page > 1) $li->appendChild(Widget::Anchor(__('&larr; Previous'), Administration::instance()->getCurrentPageURL(). '?pg=' . ($current_page - 1)));
 				else $li->setValue(__('&larr; Previous'));
 				$ul->appendChild($li);
 
-				## Summary
+				// Summary
 				$li = new XMLElement('li', __('Page %1$s of %2$s', array($current_page, max($current_page, $total_pages))));
 				$li->setAttribute('title', __('Viewing %1$s - %2$s of %3$s entries', array(
 					$start,
@@ -166,22 +164,20 @@
 				)));
 				$ul->appendChild($li);
 
-				## Next
+				// Next
 				$li = new XMLElement('li');
 				if($current_page < $total_pages) $li->appendChild(Widget::Anchor(__('Next &rarr;'), Administration::instance()->getCurrentPageURL(). '?pg=' . ($current_page + 1)));
 				else $li->setValue(__('Next &rarr;'));
 				$ul->appendChild($li);
 
-				## Last
+				// Last
 				$li = new XMLElement('li');
 				if($current_page < $total_pages) $li->appendChild(Widget::Anchor(__('Last'), Administration::instance()->getCurrentPageURL(). '?pg=' . $total_pages));
 				else $li->setValue(__('Last'));
 				$ul->appendChild($li);
 
 				$this->Form->appendChild($ul);
-
 			}
-		
 		}
 		
 		public function __actionIndex(){
