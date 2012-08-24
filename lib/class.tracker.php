@@ -3,6 +3,7 @@
 	require_once(TOOLKIT . '/class.sectionmanager.php');
 	require_once(TOOLKIT . '/class.authormanager.php');
 	require_once(TOOLKIT . '/class.entrymanager.php');
+	require_once(TOOLKIT . '/class.gateway.php');
 	require_once(CONTENT . '/content.blueprintspages.php');
 
 	Class Tracker {
@@ -54,6 +55,14 @@
 			
 			// Push it into the DB.
 			Symphony::Database()->insert($data, 'tbl_tracker_activity');
+
+			// Send the event to the URL if specificed
+			$notify_url = Symphony::Configuration()->get('notify_url', 'tracker');
+			if ($notify_url) {
+				$gateway = new Gateway;
+				$gateway->init($notify_url . "?". http_build_query($data));
+				$gateway->exec();
+			}
 		}
 		
 		public function fetchActivities(array $filters,$limit=NULL,$start=0,$sort='timestamp',$order='DESC') {
