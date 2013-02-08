@@ -779,6 +779,13 @@
 			$div->appendChild($label);
 
 			$group->appendChild($div);
+
+			// notify url of tracker event
+			$notify_url = Symphony::Configuration()->get('notify_url', 'tracker');
+			$notify_label = Widget::Label(__('Send tracker event to URL'));
+			$notify_label->appendChild(Widget::Input('settings[tracker][notify_url]', $notify_url, 'text'));
+			$group->appendChild($notify_label);
+
 			$context['wrapper']->appendChild($group);
 		}
 		
