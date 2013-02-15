@@ -273,21 +273,27 @@
 			// Otherwise grab the primary field value and build the entry string
 			else {
 				$primary_field = reset($section->fetchVisibleColumns());
-				$data = $entry->getData($primary_field->get('id'));
-				$value = $primary_field->prepareTableValue($data);
-			
-				// If we're creating the fallback, just return a string
-				if($fallback) {
-					$entry_string = $value;
-				}
-			
-				// Otherwise build a link to the entry
-				else {				
-					$entry_string = Widget::Anchor(
-						$value,
-						URL . '/symphony/publish/' . $section->get('handle') . '/edit/' . $activity['item_id']
-					)->generate();
-				}
+				if ($primary_field) {
+					$data = $entry->getData($primary_field->get('id'));
+					$value = $primary_field->prepareTableValue($data);
+				
+					// If we're creating the fallback, just return a string
+					if($fallback) {
+						$entry_string = $value;
+					}
+				
+					// Otherwise build a link to the entry
+					else {				
+						$entry_string = Widget::Anchor(
+							$value,
+							URL . '/symphony/publish/' . $section->get('handle') . '/edit/' . $activity['item_id']
+						)->generate();
+					}
+				} 
+				// using limit section entries?
+				else {
+					$fallback = true;
+				} 
 			}
 			
 			// If the section no longer exists, get the fallback section description
