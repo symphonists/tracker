@@ -21,9 +21,7 @@
 			$clearform->setAttribute('method','post');
 			$clearform->setAttribute('action',Symphony::Engine()->getCurrentPageURL());
 			$button = new XMLElement('button', __('Clear All'));
-			$button->setAttribute('class', 'tracker confirm');
-			$button->setAttribute('title', __('Clear all Activity'));
-			$button->setAttribute('name', 'action[clear-all]');
+			$button->setAttributeArray(array('name' => 'action[clear-all]', 'class' => 'button confirm delete', 'title' => __('Clear all activity'), 'accesskey' => 'd', 'data-message' => __('Are you sure you want to clear all activity?')));
 			$clearform->appendChild($button);
 			$this->appendSubheading(
 				__('Tracker Activity'),
