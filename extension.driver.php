@@ -842,6 +842,7 @@
 		public function renderPanel($context) {
 
 			$config = $context['config'];
+			$page = Administration::instance()->Page;
 
 			switch($context['type']) {
 
@@ -860,8 +861,13 @@
 							$filters[$column][] = rawurldecode($value);
 						}
 					}
+					
+					// Check to see we are being called in the right context
+					// Dashboard also has `contentExtensionDashboardPanel_Config` which extends `AjaxPage` 
+					if(method_exists($page, 'addStylesheetToHead')) {
+						$page->addStylesheetToHead(URL . '/extensions/tracker/assets/dashboard.css', 'screen', 151);
+					}
 
-					Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/tracker/assets/' . 'dashboard.css', 'screen', 151);
 					$logs = Tracker::fetchActivities($filters, (int)$config['limit'], 0);
 
 					$thead = array(
