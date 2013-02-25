@@ -219,7 +219,7 @@
 		
 		public function install() {
 			Symphony::Database()->query(
-				'CREATE TABLE `tbl_tracker_activity` (
+				'CREATE TABLE IF NOT EXISTS `tbl_tracker_activity` (
 					`id` int(11) unsigned NOT NULL auto_increment,
 					`item_type` varchar(255),
 					`item_id` varchar(75),
@@ -229,16 +229,17 @@
 					`fallback_username` varchar(255),
 					`fallback_description` varchar(255),
 					PRIMARY KEY (`id`)
-				);');
-			return;
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;');
+			return true;
 		}
 
 		public function uninstall() {
 			Symphony::Database()->query(
-				'DROP TABLE `tbl_tracker_activity`;'
+				'DROP TABLE IF EXISTS `tbl_tracker_activity`;'
 			);
 			Symphony::Configuration()->remove('tracker');
-			Administration::instance()->saveConfig();
+			
+			return Symphony::Configuration()->write();
 		}
 		
 		/*-------------------------------------------------------------------------
