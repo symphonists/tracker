@@ -3,7 +3,6 @@
 	<name>Tracker</name>
 	<description>Track user and system activity</description>
 	<repo type="github">https://github.com/czheng/tracker</repo>
-	<url type="discuss">http://symphony-cms.com/discuss/thread/49003/</url>
 	<types>
 		<type>Workflow</type>
 	</types>
@@ -15,10 +14,10 @@
 			<name github="symphonists">Symphony Community</name>
 		</author>
 	</authors>
-	<media>
-		<item type="image" url="http://symphonyextensions.com/czheng/tracker/media/tracker.png">Track user and system activity</item>
-	</media>
 	<releases>
+		<release version="1.2" date="2014-03-18" min="2.4">
+			- Symphony 2.4 compatibility
+		</release>
 		<release version="1.1.1" date="2012-06-20" min="2.3" />
 		<release version="1.1" date="2012-06-20" min="2.3">
 			- Fixed compatibility issues with Symphony 2.3

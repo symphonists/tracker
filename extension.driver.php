@@ -3,7 +3,7 @@
 	require_once(EXTENSIONS . '/tracker/lib/class.tracker.php');
 
 	class Extension_Tracker extends Extension {
-		
+
 		public function fetchNavigation() {
 			return array(
 				array(
@@ -17,7 +17,7 @@
 
 		public function getSubscribedDelegates() {
 			return array(
-			
+
 				// Extension setup
 				array(
 					'page' => '/system/preferences/',
@@ -29,7 +29,7 @@
 					'delegate' => 'CustomActions',
 					'callback' => 'savePreferences'
 				),
-				
+
 				// Entry activity tracking
 				array(
 					'page' 		=> '/publish/new/',
@@ -51,7 +51,7 @@
 					'delegate'	=> 'EventPostSaveFilter',
 					'callback'	=> 'parseEventSave'
 				),
-				
+
 				// Blueprints activity tracking
 				array(
 					'page'		=> '/blueprints/pages/',
@@ -128,7 +128,7 @@
 					'delegate'	=> 'SectionPreDelete',
 					'callback'	=> 'parseSectionAction'
 				),
-				
+
 				// System activity tracking
 				array(
 					'page'		=> '/system/authors/',
@@ -165,7 +165,7 @@
 					'delegate'	=> 'Save',
 					'callback'	=> 'parsePreferencesSave'
 				),
-				
+
 				// Login tracking
 				array(
 					'page'		=> '/login/',
@@ -197,7 +197,7 @@
 					'delegate'	=> 'AuthorPostPasswordResetRequest',
 					'callback'	=> 'parsePasswordAction'
 				),
-				
+
 				// Dashboard
 				array(
 					'page'		=> '/backend/',
@@ -216,7 +216,7 @@
 				),
 			);
 		}
-		
+
 		public function install() {
 			Symphony::Database()->query(
 				'CREATE TABLE `tbl_tracker_activity` (
@@ -238,13 +238,13 @@
 				'DROP TABLE `tbl_tracker_activity`;'
 			);
 			Symphony::Configuration()->remove('tracker');
-			Administration::instance()->saveConfig();
+			Symphony::Configuration()->write();
 		}
-		
+
 		/*-------------------------------------------------------------------------
 			Activity Parsing
 		-------------------------------------------------------------------------*/
-		
+
 		public function parseEntryAction($context) {
 
 			if($this->validateUser()) {
@@ -259,15 +259,15 @@
 					$section_id = $context['entry']->get('section_id');
 					$ids = (array) $context['entry']->get('id');
 				}
-				
+
 				// Loop through entries, validate section, and log them.
 				foreach($ids as $entry_id) {
-					
+
 					if(!isset($section_id)) {
 						include_once(TOOLKIT . '/class.entrymanager.php');
 						$section_id = EntryManager::fetchEntrySectionID($entry_id);
 					}
-					
+
 					if($this->validateSection($section_id)) {
 						Tracker::log(
 							$section_id,
@@ -284,7 +284,7 @@
 		public function parseEventSave($context) {
 
 			if($this->validateSection($context['entry']->get('section_id'))) {
-			
+
 				// If the ID's been passed, we're updating an existing entry,
 				// otherwise, it's new.
 				if(!empty($_POST['id'])) {
@@ -293,7 +293,7 @@
 				else {
 					$action = 'created';
 				}
-				
+
 				// Logged-in author, or anonymous front-end user?
 				if(!is_null(Frontend::instance()->Author)) {
 					$author = Frontend::instance()->Author;
@@ -305,7 +305,7 @@
 				else {
 					$author_id = 0;
 				}
-			
+
 				// Log it.
 				Tracker::log(
 					$context['entry']->get('section_id'),
@@ -316,15 +316,15 @@
 				);
 			}
 		}
-		
+
 		public function parsePageAction($context) {
 
 			if($this->validateUser() && $this->validateElement('pages')) {
-			
+
 				// Set action type from delegate name. Saves having to
 				// use three separate callbacks.
 				$action = $this->getActionFromDelegateName($context['delegate']);
-				
+
 				// Page IDs are provided in different formats depending
 				// on if you're deleting or not. So standardize them.
 				if(isset($context['page_ids'])) {
@@ -333,7 +333,7 @@
 				else {
 					$ids = (array) $context['page_id'];
 				}
-				
+
 				// Log it.
 				foreach($ids as $id) {
 					Tracker::log(
@@ -346,16 +346,16 @@
 				}
 			}
 		}
-		
+
 		public function parseEventAction($context) {
 			if($this->validateUser() && $this->validateElement('events')) {
-			
+
 				// Set action type from delegate name. Saves having to
 				// use three separate callbacks.
 				$action = $this->getActionFromDelegateName($context['delegate']);
 
 				$item = str_replace(EVENTS . '/', '', $context['file']);
-				
+
 				// Log it.
 				Tracker::log(
 					'events',
@@ -366,16 +366,16 @@
 				);
 			}
 		}
-		
+
 		public function parseDatasourceAction($context) {
 			if($this->validateUser() && $this->validateElement('datasources')) {
-			
+
 				// Set action type from delegate name. Saves having to
 				// use three separate callbacks.
 				$action = $this->getActionFromDelegateName($context['delegate']);
-				
+
 				$item = str_replace(DATASOURCES . '/', '', $context['file']);
-				
+
 				// Log it.
 				Tracker::log(
 					'datasources',
@@ -386,16 +386,16 @@
 				);
 			}
 		}
-		
+
 		public function parseUtilityAction($context) {
 			if($this->validateUser() && $this->validateElement('utilities')) {
-			
+
 				// Set action type from delegate name. Saves having to
 				// use three separate callbacks.
 				$action = $this->getActionFromDelegateName($context['delegate']);
-				
+
 				$item = str_replace(UTILITIES . '/', '', $context['file']);
-				
+
 				// Log it.
 				Tracker::log(
 					'utilities',
@@ -406,15 +406,15 @@
 				);
 			}
 		}
-		
+
 		public function parseSectionAction($context) {
 
 			if($this->validateUser() && $this->validateElement('sections')) {
-			
+
 				// Set action type from delegate name. Saves having to
 				// use three separate callbacks.
 				$action = $this->getActionFromDelegateName($context['delegate']);
-				
+
 				// Section IDs are provided in different formats depending
 				// on if you're deleting or not. So standardize them.
 				if(isset($context['section_ids'])) {
@@ -423,7 +423,7 @@
 				else {
 					$ids = (array) $context['section_id'];
 				}
-				
+
 				// Log it.
 				foreach($ids as $id) {
 					Tracker::log(
@@ -436,17 +436,17 @@
 				}
 			}
 		}
-		
+
 		public function parseAuthorAction($context) {
 			if($this->validateUser() && $this->validateElement('authors')) {
-			
+
 				// Set action type from delegate name. Saves having to
 				// use three separate callbacks.
 				$action = $this->getActionFromDelegateName($context['delegate']);
-				
+
 				// Figure out the author IDs and standardize their format
 				if($context['author'] instanceof Author) {
-				
+
 					// Workaround because the Author object returned by the delegate
 					// doesn't have an ID for some reason.
 					if($action == 'created') {
@@ -461,7 +461,7 @@
 				else {
 					$ids = $context['author_ids'];
 				}
-				
+
 				// Log it.
 				foreach($ids as $id) {
 					Tracker::log(
@@ -474,16 +474,16 @@
 				}
 			}
 		}
-		
+
 		public function parseExtensionAction($context) {
 			if($this->validateUser() && $this->validateElement('extensions')) {
-			
+
 				// Set action type from delegate name. Saves having to
 				// use three separate callbacks.
 				$action = $this->getActionFromDelegateName($context['delegate']);
-				
+
 				$extensions = $context['extensions'];
-				
+
 				// Log it.
 				foreach($extensions as $name) {
 					Tracker::log(
@@ -495,9 +495,9 @@
 					);
 				}
 			}
-			
+
 		}
-		
+
 		public function parsePreferencesSave($context) {
 			if($this->validateUser() && $this->validateElement('preferences')){
 				Tracker::log(
@@ -507,11 +507,11 @@
 					$this->getAuthorID(),
 					$this->getTimestamp()
 				);
-				
+
 				// Log changes to maintenance mode from system prefs.
 				// Doesn't work if the page alert's "Restore" link is used.
 				if(Symphony::Configuration()->get('enabled','maintenance_mode') != $context['settings']['maintenance_mode']['enabled']) {
-				
+
 					Tracker::log(
 						'maintenance-mode',
 						NULL,
@@ -522,11 +522,11 @@
 				}
 			}
 		}
-		
+
 		public function parseLogin($context) {
 			if($this->validateElement('login')){
 				$item = NULL;
-				
+
 				// Set author ID. If author doesn't exist, store the IP
 				// address.
 				if(Symphony::Engine()->Author) {
@@ -546,7 +546,7 @@
 				else {
 					$action = 'attempted to log in';
 				}
-				
+
 				Tracker::log(
 					'login',
 					$item,
@@ -556,29 +556,29 @@
 				);
 			}
 		}
-		
+
 		public function parsePasswordAction($context) {
 			if($this->validateElement('password')){
-		
+
 				// Use delegate name to determine action
 				switch($context['delegate']) {
 					case 'AuthorPostPasswordResetSuccess':
 						$action = 'reset';
 					break;
-				
+
 					case 'AuthorPostPasswordResetFailure':
 						$action = 'attempted to reset';
 					break;
-				
+
 					case 'AuthorPostPasswordChange':
 						$action = 'changed';
 					break;
-				
+
 					case 'AuthorPostPasswordResetRequest':
 						$action = 'requested to reset';
 					break;
 				}
-		
+
 				// If the user's unknown, set ID to 0 and store their email.
 				if($action == 'attempted to reset') {
 					$account = 0;
@@ -591,7 +591,7 @@
 					}
 					$item = NULL;
 				}
-			
+
 				Tracker::log(
 					'password-reset',
 					$item,
@@ -601,19 +601,19 @@
 				);
 			}
 		}
-		
+
 		/*-------------------------------------------------------------------------
 			Utilities
 		-------------------------------------------------------------------------*/
-		
+
 		public function getAuthorID() {
 			return Symphony::Engine()->Author->get('id');
 		}
-		
+
 		public function getTimestamp() {
 			return DateTimeObj::getGMT('Y-m-d H:i:s', time());
 		}
-		
+
 		public function getActionFromDelegateName($name) {
 			if(stripos($name,'edit')) {
 				return 'updated';
@@ -634,11 +634,11 @@
 				return 'uninstalled';
 			}
 		}
-		
+
 		public function getExclusions($type) {
 			return explode(',', Symphony::Configuration()->get('excluded-' . $type, 'tracker'));
 		}
-		
+
 		public function validateElement($handle) {
 			if(in_array($handle, $this->getExclusions('system-elements'))) {
 				return FALSE;
@@ -647,7 +647,7 @@
 				return TRUE;
 			}
 		}
-		
+
 		public function validateSection($id) {
 			if(in_array($id, $this->getExclusions('sections'))) {
 				return FALSE;
@@ -655,8 +655,8 @@
 			else {
 				return TRUE;
 			}
-		}	
-		
+		}
+
 		public function validateUser($id = NULL) {
 			if(is_null($id)) {
 				$id = $this->getAuthorID();
@@ -668,16 +668,16 @@
 				return TRUE;
 			}
 		}
-		
+
 		/*-------------------------------------------------------------------------
 			Preferences
 		-------------------------------------------------------------------------*/
 
 		public function appendPreferences($context){
-			
+
 			include_once(TOOLKIT . '/class.authormanager.php');
 			include_once(TOOLKIT . '/class.sectionmanager.php');
-		
+
 			// Fieldset and layout
 			$group = new XMLElement('fieldset');
 			$group->setAttribute('class', 'settings');
@@ -685,7 +685,7 @@
 
 			$div = new XMLElement('div');
 			$div->setAttribute('class', 'group triple');
-			
+
 			// Excluded System Elements
 			$label = Widget::Label(__('Excluded System Elements'));
 			$options = array();
@@ -724,7 +724,7 @@
 			// Excluded Sections
 			$label = Widget::Label(__('Excluded Sections'));
 			$options = array();
-	
+
 			$sm = new SectionManager(Administration::instance());
 
 			$sections = $sm->fetch();
@@ -749,11 +749,11 @@
 
 			$label->appendChild($input);
 			$div->appendChild($label);
-			
+
 			// Excluded Users
 			$label = Widget::Label(__('Excluded Users'));
 			$options = array();
-			
+
 			$am = new AuthorManager(Administration::instance());
 			$authors = $am->fetch();
 			$excluded_authors = explode(',',Symphony::Configuration()->get('excluded-users', 'tracker'));
@@ -788,13 +788,13 @@
 
 			$context['wrapper']->appendChild($group);
 		}
-		
+
 		public function savePreferences() {
-		
+
 			// Remove existing configuration settings.
 			Symphony::Configuration()->remove('tracker');
-			Administration::instance()->saveConfig();
-			
+			Symphony::Configuration()->write();
+
 			// If there are Tracker settings, format them
 			if(is_array($_POST['settings']['tracker'])){
 				foreach($_POST['settings']['tracker'] as $preference => $value){
@@ -804,11 +804,11 @@
 				}
 			}
 		}
-		
+
 		/*-------------------------------------------------------------------------
 			Dashboard
 		-------------------------------------------------------------------------*/
-		
+
 		public function dashboardPanelTypes($context) {
 			$context['types']['tracker_activity'] = "Tracker Activity";
 		}
@@ -826,7 +826,7 @@
 
 					$label = Widget::Label(__('Limit'), Widget::Input('config[limit]', $config['limit']));
 					$fieldset->appendChild($label);
-					
+
 					$label = Widget::Label(__('Filter Query String'), Widget::Input('config[filter_string]', $config['filter_string']));
 					$fieldset->appendChild($label);
 
@@ -845,10 +845,10 @@
 			switch($context['type']) {
 
 				case 'tracker_activity':
-				
+
 					// Build filter info
 					$filters = array();
-			
+
 					if(isset($config['filter_string'])){
 
 						list($column, $value) = explode(':', $config['filter_string'], 2);
