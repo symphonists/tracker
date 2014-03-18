@@ -219,7 +219,7 @@
 
 		public function install() {
 			Symphony::Database()->query(
-				'CREATE TABLE `tbl_tracker_activity` (
+				'CREATE TABLE IF NOT EXISTS `tbl_tracker_activity` (
 					`id` int(11) unsigned NOT NULL auto_increment,
 					`item_type` varchar(255),
 					`item_id` varchar(75),
@@ -229,16 +229,16 @@
 					`fallback_username` varchar(255),
 					`fallback_description` varchar(255),
 					PRIMARY KEY (`id`)
-				);');
-			return;
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;');
+			return true;
 		}
 
 		public function uninstall() {
 			Symphony::Database()->query(
-				'DROP TABLE `tbl_tracker_activity`;'
+				'DROP TABLE IF EXISTS `tbl_tracker_activity`;'
 			);
 			Symphony::Configuration()->remove('tracker');
-			Symphony::Configuration()->write();
+			return Symphony::Configuration()->write();
 		}
 
 		/*-------------------------------------------------------------------------
@@ -841,6 +841,7 @@
 		public function renderPanel($context) {
 
 			$config = $context['config'];
+			$page = Administration::instance()->Page;
 
 			switch($context['type']) {
 
@@ -859,8 +860,13 @@
 							$filters[$column][] = rawurldecode($value);
 						}
 					}
+					
+					// Check to see we are being called in the right context
+					// Dashboard also has `contentExtensionDashboardPanel_Config` which extends `AjaxPage` 
+					if(method_exists($page, 'addStylesheetToHead')) {
+						$page->addStylesheetToHead(URL . '/extensions/tracker/assets/dashboard.css', 'screen', 151);
+					}
 
-					Administration::instance()->Page->addStylesheetToHead(URL . '/extensions/tracker/assets/' . 'dashboard.css', 'screen', 151);
 					$logs = Tracker::fetchActivities($filters, (int)$config['limit'], 0);
 
 					$thead = array(

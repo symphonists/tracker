@@ -273,20 +273,26 @@
 			// Otherwise grab the primary field value and build the entry string
 			else {
 				$primary_field = reset($section->fetchVisibleColumns());
-				$data = $entry->getData($primary_field->get('id'));
-				$value = $primary_field->prepareTableValue($data);
-			
-				// If we're creating the fallback, just return a string
-				if($fallback) {
-					$entry_string = $value;
+				if ($primary_field) {
+					$data = $entry->getData($primary_field->get('id'));
+					$value = $primary_field->prepareTableValue($data);
+				
+					// If we're creating the fallback, just return a string
+					if($fallback) {
+						$entry_string = $value;
+					}
+				
+					// Otherwise build a link to the entry
+					else {				
+						$entry_string = Widget::Anchor(
+							$value,
+							SYMPHONY_URL . '/publish/' . $section->get('handle') . '/edit/' . $activity['item_id']
+						)->generate();
+					}
 				}
-			
-				// Otherwise build a link to the entry
-				else {				
-					$entry_string = Widget::Anchor(
-						$value,
-						URL . '/symphony/publish/' . $section->get('handle') . '/edit/' . $activity['item_id']
-					)->generate();
+				// using limit section entries?
+				else {
+					$fallback = true;
 				}
 			}
 			
@@ -308,7 +314,7 @@
 			else {
 				$section_string = Widget::Anchor(
 					$section->get('name'),
-					'/symphony/blueprints/sections/edit/' . $activity['item_type']
+					SYMPHONY_URL . '/blueprints/sections/edit/' . $activity['item_type']
 				)->generate();
 			}
 			
@@ -361,7 +367,7 @@
 								$page[0]['title'],
 								($fallback ? __('template') : Widget::Anchor(
 									__('template'),
-									URL . '/symphony/blueprints/pages/template/' . $activity['item_id']
+									SYMPHONY_URL . '/blueprints/pages/template/' . $activity['item_id']
 								)->generate())
 							)
 						);
@@ -373,7 +379,7 @@
 							array(
 								($fallback ? $page[0]['title'] : Widget::Anchor(
 									$page[0]['title'],
-									URL . '/symphony/blueprints/pages/edit/' . $activity['item_id']
+									SYMPHONY_URL . '/blueprints/pages/edit/' . $activity['item_id']
 								)->generate())
 							)
 						);
@@ -398,7 +404,7 @@
 							array(
 								($fallback ? $about['name'] : Widget::Anchor(
 									$about['name'],
-									URL . '/symphony/blueprints/events/edit/' . $handle
+									SYMPHONY_URL . '/blueprints/events/edit/' . $handle
 								)->generate())
 							)
 						);
@@ -423,7 +429,7 @@
 							array(
 								($fallback ? $about['name'] : Widget::Anchor(
 									$about['name'],
-									URL . '/symphony/blueprints/datasources/edit/' . $handle
+									SYMPHONY_URL . '/blueprints/datasources/edit/' . $handle
 								)->generate())
 							)
 						);
@@ -444,7 +450,7 @@
 							array(
 								($fallback ? $activity['item_id'] : Widget::Anchor(
 									$activity['item_id'],
-									URL . '/symphony/blueprints/utilities/edit/' . str_replace('.xsl', '', $activity['item_id'])
+									SYMPHONY_URL . '/blueprints/utilities/edit/' . str_replace('.xsl', '', $activity['item_id'])
 								)->generate())
 							)
 						);
@@ -468,7 +474,7 @@
 							array(
 								($fallback ? $section->get('name') : Widget::Anchor(
 									$section->get('name'),
-									URL . '/symphony/blueprints/sections/edit/' . $activity['item_id']
+									SYMPHONY_URL . '/blueprints/sections/edit/' . $activity['item_id']
 								)->generate())
 							)
 						);
@@ -496,7 +502,7 @@
 								array(
 									($fallback ? __('author record') : Widget::Anchor(
 										__('author record'),
-										URL . '/symphony/system/authors/edit/' . $activity['item_id']
+										SYMPHONY_URL . '/system/authors/edit/' . $activity['item_id']
 									)->generate())
 								)
 							);
@@ -509,7 +515,7 @@
 								array(
 									($fallback ? $author->getFullName() : Widget::Anchor(
 										$author->getFullName(),
-										URL . '/symphony/system/authors/edit/' . $activity['item_id']
+										SYMPHONY_URL . '/system/authors/edit/' . $activity['item_id']
 									)->generate())
 								)
 							);
@@ -524,7 +530,7 @@
 						array(
 							Widget::Anchor(
 								__('system preferences'),
-								URL . '/symphony/system/preferences'
+								SYMPHONY_URL . '/system/preferences'
 							)->generate()
 						)
 					);
@@ -587,7 +593,7 @@
 			else {
 				$author_string = Widget::Anchor(
 					$author->getFullName(),
-					'/symphony/system/authors/edit/' . $id
+					SYMPHONY_URL . '/system/authors/edit/' . $id
 				)->generate();
 			}
 			return $author_string;
