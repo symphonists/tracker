@@ -612,7 +612,7 @@ class Extension_Tracker extends Extension
 
     public function getAuthorID()
     {
-        return Symphony::Engine()->Author->get('id');
+        return Symphony::Author()->get('id');
     }
 
     public function getTimestamp()
