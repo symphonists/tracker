@@ -108,9 +108,9 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
         // Assemble the table
         $table = Widget::Table(
             Widget::TableHead($thead), null,
-            Widget::TableBody($tbody), null
+            Widget::TableBody($tbody), 'selectable', null,
+            array('role' => 'directory', 'aria-labelledby' => 'symphony-subheading', 'data-interactive' => 'data-interactive')
         );
-        $table->setAttribute('class','selectable');
         $this->Form->appendChild($table);
 
         // Append table actions

@@ -15,6 +15,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.2.2" date="2015-06-04" min="2.4">
+			- Bug fix, add right data attributes to table
+		</release>
 		<release version="1.2.1" date="2014-06-17" min="2.4">
 			- Code style clean-up
 		</release>
