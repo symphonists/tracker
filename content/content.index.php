@@ -17,12 +17,15 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
         );
 
         // Add a button to clear all activity
-        $clearform = new XMLElement('form');
-        $clearform->setAttribute('method','post');
-        $clearform->setAttribute('action',Symphony::Engine()->getCurrentPageURL());
+        $clearform = Widget::Form(Symphony::Engine()->getCurrentPageURL(), 'post');
         $button = new XMLElement('button', __('Clear All'));
         $button->setAttributeArray(array('name' => 'action[clear-all]', 'class' => 'button confirm delete', 'title' => __('Clear all activity'), 'accesskey' => 'd', 'data-message' => __('Are you sure you want to clear all activity?')));
         $clearform->appendChild($button);
+
+        if (Symphony::Engine()->isXSRFEnabled()) {
+            $clearform->prependChild(XSRF::formToken());
+        }
+
         $this->appendSubheading(
             __('Tracker Activity'),
             $clearform
