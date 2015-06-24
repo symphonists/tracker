@@ -18,12 +18,23 @@
 			 * case, output the IP or email we captured for reference. 
 			 */
 			$author = AuthorManager::fetchByID($user_id);
+			$members = $_SESSION['sym-members'];
 			
 			if($author instanceof Author) {
 				$username = $author->getFullName();
 			}
 			else {
-				if(is_numeric($item_type)) {
+				if (!empty($members)) {
+					if ($members['members-section-id'] && $members['id']) {
+						$members_section = SectionManager::fetch($members['members-section-id'])->get('handle');
+						$members_link = SYMPHONY_URL . '/publish/' . $members_section .'/edit/' . $members['id'] . '/';
+						$username = __('The front-end member %s', array('<a href="' . $members_link . '">' . $members['username'] . '</a>'));
+					}
+					else {
+						$username = __('The front-end member %s', array($members['username']));
+					}
+				}
+				else if (is_numeric($item_type)) {
 					$username = __('A front-end user');
 				}
 				else {
