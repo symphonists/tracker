@@ -15,7 +15,12 @@
 		</author>
 	</authors>
 	<releases>
-		<release version="1.3" date="2015-06-08" min="2.4" max="2.6.x">
+		<release version="1.4.0" date="2015-06-24" min="2.5" max="2.6.x">
+			- Fixed author deletion
+			- Added tracking of front-end members
+			- Updated interface to highlight create and delete actions
+		</release>
+		<release version="1.3.0" date="2015-06-08" min="2.4" max="2.6.x">
 			- Fixed compatibility with Symphony's XSRF
 			- Added Slovak translation
 		</release>
