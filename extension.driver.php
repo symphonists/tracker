@@ -462,7 +462,7 @@ class Extension_Tracker extends Extension
                     $ids = (array) $context['author']->get('id');
                 }
             } else {
-                $ids = $context['author_ids'];
+                $ids = (array) $context['author_ids'];
             }
 
             // Log it.
