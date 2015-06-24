@@ -69,15 +69,12 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
                     'inactive',
                     null,
                     count($thead)
-                )),
-                'odd')
+                )))
             );
         }
 
         // Otherwise, build table rows
         else {
-            $bOdd = true;
-
             foreach ($logs as $activity) {
 
                 // Format the date and time
@@ -92,6 +89,15 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
 
                 $description = Tracker::getDescription($activity);
 
+                // Row class
+                $row_class = null;
+                if ($activity['action_type'] === 'created') {
+                    $row_class = 'status-ok';
+                }
+                elseif ($activity['action_type'] === 'deleted') {
+                    $row_class = 'status-error';
+                }
+
                 // Assemble the columns
                 $col_date = Widget::TableData($date);
                 $col_time = Widget::TableData($time);
@@ -101,9 +107,7 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
 
                 // Insert the row
                 if (!is_null($description)) {
-                    $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : NULL));
-
-                    $bOdd = !$bOdd;
+                    $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), $row_class);
                 }
             }
         }
