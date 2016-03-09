@@ -654,6 +654,9 @@ class Extension_Tracker extends Extension
 
     public function validateSection($id)
     {
+        if (is_null($id)) {
+            return TRUE;
+        }
         if (in_array($id, $this->getExclusions('sections'))) {
             return FALSE;
         } else {
