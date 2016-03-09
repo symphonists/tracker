@@ -17,6 +17,7 @@
 	<releases>
 		<release version="1.4.1" date="2016-03-09" min="2.5" max="2.6.x">
 			- Added support for notifying multiple URLs
+			- Log entry delete events
 		</release>
 		<release version="1.4.0" date="2015-06-24" min="2.5" max="2.6.x">
 			- Fixed author deletion
