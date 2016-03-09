@@ -69,9 +69,10 @@
 
 			// Send the event to the URL if specificed
 			$notify_url = Symphony::Configuration()->get('notify_url', 'tracker');
-			if ($notify_url) {
+			$notify_urls_array = preg_split('/[\s,]+/', $notify_url);
+			foreach($notify_urls_array as $url) {
 				$gateway = new Gateway;
-				$gateway->init($notify_url . "?". http_build_query($data));
+				$gateway->init($url . "?". http_build_query($data));
 				$gateway->exec();
 			}
 		}
