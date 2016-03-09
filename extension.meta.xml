@@ -3,7 +3,7 @@
 	<name>Tracker</name>
 	<description>Track user and system activity</description>
 	<repo type="github">https://github.com/symphonists/tracker</repo>
-	<repo type="issues">https://github.com/symphonists/tracker/issues</repo>
+	<url type="issues">https://github.com/symphonists/tracker/issues</url>
 	<types>
 		<type>Workflow</type>
 		<type>Audit</type>
