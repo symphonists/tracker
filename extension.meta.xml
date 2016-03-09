@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<extension id="tracker" status="released" xmlns="http://symphony-cms.com/schemas/extension/1.0">
+<extension id="tracker" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
 	<name>Tracker</name>
 	<description>Track user and system activity</description>
-	<repo type="github">https://github.com/czheng/tracker</repo>
+	<repo type="github">https://github.com/symphonists/tracker</repo>
+	<repo type="issues">https://github.com/symphonists/tracker/issues</repo>
 	<types>
 		<type>Workflow</type>
+		<type>Audit</type>
+		<type>Log</type>
 	</types>
 	<authors>
 		<author>
@@ -15,7 +18,7 @@
 		</author>
 	</authors>
 	<releases>
-		<release version="1.4.1" date="2016-03-09" min="2.5" max="2.6.x">
+		<release version="1.5.0" date="2016-03-09" min="2.5.x" max="2.x.x">
 			- Added support for notifying multiple URLs
 			- Log entry delete events
 		</release>
