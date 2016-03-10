@@ -88,6 +88,7 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
                 );
 
                 $description = Tracker::getDescription($activity);
+                $description_class = '';
 
                 // Row class
                 $row_class = null;
@@ -98,17 +99,20 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
                     $row_class = 'status-error';
                 }
 
+                if (is_null($description)) {
+                    $description = __('None found.');
+                    $description_class = 'inactive';
+                }
+
                 // Assemble the columns
                 $col_date = Widget::TableData($date);
                 $col_time = Widget::TableData($time);
-                $col_desc = Widget::TableData($description);
+                $col_desc = Widget::TableData($description, $description_class);
 
                 $col_desc->appendChild(Widget::Input("items[{$activity['id']}]", null, 'checkbox'));
 
                 // Insert the row
-                if (!is_null($description)) {
-                    $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), $row_class);
-                }
+                $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), $row_class);
             }
         }
 
