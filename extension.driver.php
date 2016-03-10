@@ -637,6 +637,7 @@ class Extension_Tracker extends Extension
         } elseif (stripos($name,'uninstall')) {
             return 'uninstalled';
         }
+        return 'unkonwn';
     }
 
     public function getExclusions($type)
