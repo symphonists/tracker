@@ -100,8 +100,12 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
                 }
 
                 if (is_null($description)) {
-                    $description = __('None found.');
-                    $description_class = 'inactive';
+                    if (!empty($activity['fallback_description'])) {
+                        $description = $activity['fallback_description'];
+                    } else {
+                        $description = __('None found.');
+                        $description_class = 'inactive';
+                    }
                 }
 
                 // Assemble the columns
@@ -112,7 +116,7 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
                 $col_desc->appendChild(Widget::Input("items[{$activity['id']}]", null, 'checkbox'));
 
                 // Insert the row
-                $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), $row_class);
+                $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), $row_class, 'activity-' . $activity['id']);
             }
         }
 
