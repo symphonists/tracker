@@ -255,27 +255,36 @@ class Extension_Tracker extends Extension
     {
         if ($this->validateUser()) {
             $action = $this->getActionFromDelegateName($context['delegate']);
+            $ids = array();
+            $section_id = null;
 
             // Entry IDs are provided in different formats depending
             // on if you're deleting or not. So standardize them.
             if ($action == 'deleted') {
-                $ids = (array) $context['entry_id'];
+                $ids = $context['entry_id'];
             } else {
                 $section_id = $context['entry']->get('section_id');
-                $ids = (array) $context['entry']->get('id');
+                $ids = $context['entry']->get('id');
             }
-
+            if ($ids && !is_array($ids)) {
+                $ids = array($ids);
+            }
+            if (!$ids) {
+                return;
+            }
             // Loop through entries, validate section, and log them.
             foreach ($ids as $entry_id) {
-
-                if (!isset($section_id)) {
-                    include_once(TOOLKIT . '/class.entrymanager.php');
-                    $section_id = EntryManager::fetchEntrySectionID($entry_id);
+                $current_section_id = $section_id;
+                if (!$current_section_id) {
+                    // This can be removed when dropping 2.5.x compat
+                    if (!class_exists('EntryManager')) {
+                        include_once(TOOLKIT . '/class.entrymanager.php');
+                    }
+                    $current_section_id = EntryManager::fetchEntrySectionID($entry_id);
                 }
-
-                if ($this->validateSection($section_id)) {
+                if ($this->validateSection($current_section_id)) {
                     Tracker::log(
-                        $section_id,
+                        $current_section_id,
                         $entry_id,
                         $action,
                         $this->getAuthorID(),
