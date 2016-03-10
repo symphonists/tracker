@@ -45,7 +45,7 @@ class Extension_Tracker extends Extension
             ),
             array(
                 'page' 		=> '/publish/',
-                'delegate'	=> 'EntryPostDelete',
+                'delegate'	=> 'EntryPreDelete',
                 'callback'	=> 'parseEntryAction'
             ),
             array(
