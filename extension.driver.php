@@ -628,8 +628,7 @@ class Extension_Tracker extends Extension
             return 'updated';
         } elseif (stripos($name,'create')) {
             return 'created';
-        } elseif (stripos($name,'delete') !== FALSE) { // Because Delete delegate returns 0
-
+        } elseif (stripos($name,'delete')) {
             return 'deleted';
         } elseif (stripos($name,'enable')) {
             return 'enabled';
