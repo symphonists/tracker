@@ -18,9 +18,11 @@
 		</author>
 	</authors>
 	<releases>
-		<release version="1.5.0" date="2016-03-09" min="2.5.x" max="2.x.x">
+		<release version="1.5.0" date="2016-03-10" min="2.5.x" max="2.x.x">
 			- Added support for notifying multiple URLs
 			- Log entry delete events
+			- Use `EntryPreDelete` instead of `EntryPostDelete`
+			- Minor bug fixes
 		</release>
 		<release version="1.4.0" date="2015-06-24" min="2.5" max="2.6.x">
 			- Fixed author deletion
