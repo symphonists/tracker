@@ -461,6 +461,8 @@ class Extension_Tracker extends Extension
                 } else {
                     $ids = (array) $context['author']->get('id');
                 }
+            } else if (isset($context['author_id'])) {
+                $ids = array($context['author_id']);
             } else {
                 $ids = (array) $context['author_ids'];
             }
