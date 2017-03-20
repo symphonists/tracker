@@ -47,7 +47,7 @@ Class datasourcetracker_activity extends Datasource{
         return false;
     }
 
-    public function grab(&$param_pool=NULL)
+    public function grab(array &$param_pool = NULL)
     {
         $result = new XMLElement($this->dsParamROOTELEMENT);
         $param_output = array();
