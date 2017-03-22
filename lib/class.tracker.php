@@ -26,12 +26,18 @@
 			else {
 				if (!empty($members)) {
 					if ($members['members-section-id'] && $members['id']) {
+					  // Check if member is using username, otherwise use email
+					  if (empty($members['username'])) {
+					    $membername = $members['email'];
+					  } else {
+					    $membername = $members['username'];
+					  }
 						$members_section = SectionManager::fetch($members['members-section-id'])->get('handle');
 						$members_link = SYMPHONY_URL . '/publish/' . $members_section .'/edit/' . $members['id'] . '/';
-						$username = __('The front-end member %s', array('<a href="' . $members_link . '">' . $members['username'] . '</a>'));
+						$username = __('The front-end member %s', array('<a href="' . $members_link . '">' . $membername . '</a>'));
 					}
 					else {
-						$username = __('The front-end member %s', array($members['username']));
+						$username = __('The front-end member %s', array($membername));
 					}
 				}
 				else if (is_numeric($item_type)) {
