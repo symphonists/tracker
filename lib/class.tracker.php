@@ -26,12 +26,14 @@
 			else {
 				if (!empty($members)) {
 					if ($members['members-section-id'] && $members['id']) {
-					  // Check if member is using username, otherwise use email
-					  if (empty($members['username'])) {
-					    $membername = $members['email'];
-					  } else {
-					    $membername = $members['username'];
-					  }
+						// Check if member is using username, otherwise use email
+						if (isset($members['email']) && !empty($members['email'])) {
+							$membername = $members['email'];
+						} else if (isset($members['username']) && !empty($members['username'])) {
+							$membername = $members['username'];
+						} else {
+							$membername = 'unknown';
+						}
 						$members_section = SectionManager::fetch($members['members-section-id'])->get('handle');
 						$members_link = SYMPHONY_URL . '/publish/' . $members_section .'/edit/' . $members['id'] . '/';
 						$username = __('The front-end member %s', array('<a href="' . $members_link . '">' . $membername . '</a>'));
@@ -195,7 +197,7 @@
 				$item = Tracker::formatEntryItem($activity);
 			} 
 
-			// Otherwise, it's a system element			
+			// Otherwise, it's a system element
 			else {
 				$item = Tracker::formatElementItem($activity);
 			}
@@ -597,16 +599,14 @@
 		}
 		
 		public function formatAuthorString($id, $username) {
-		
 			// Get author info
 			$author = AuthorManager::fetchByID($id);
-			
-	
+
 			// If the author no longer exists, use the fallback name
-			if(!($author instanceof Author)) {
+			if (!($author instanceof Author)) {
 				$author_string = $username;
 			}
-	
+
 			// Otherwise generate a link to the author record
 			else {
 				$author_string = Widget::Anchor(
