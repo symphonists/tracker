@@ -16,20 +16,22 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
             ))
         );
 
-        // Add a button to clear all activity
-        $clearform = Widget::Form(Symphony::Engine()->getCurrentPageURL(), 'post');
-        $button = new XMLElement('button', __('Clear All'));
-        $button->setAttributeArray(array('name' => 'action[clear-all]', 'class' => 'button confirm delete', 'title' => __('Clear all activity'), 'accesskey' => 'd', 'data-message' => __('Are you sure you want to clear all activity?')));
-        $clearform->appendChild($button);
+        // Add a button to clear all activity, if developer
+        if (Tracker::Author()->isDeveloper()) {
+            $clearform = Widget::Form(Symphony::Engine()->getCurrentPageURL(), 'post');
+            $button = new XMLElement('button', __('Clear All'));
+            $button->setAttributeArray(array('name' => 'action[clear-all]', 'class' => 'button confirm delete', 'title' => __('Clear all activity'), 'accesskey' => 'd', 'data-message' => __('Are you sure you want to clear all activity?')));
+            $clearform->appendChild($button);
 
-        if (Symphony::Engine()->isXSRFEnabled()) {
-            $clearform->prependChild(XSRF::formToken());
+            if (Symphony::Engine()->isXSRFEnabled()) {
+                $clearform->prependChild(XSRF::formToken());
+            }
+
+            $this->appendSubheading(
+                __('Tracker Activity'),
+                $clearform
+            );
         }
-
-        $this->appendSubheading(
-            __('Tracker Activity'),
-            $clearform
-        );
 
         // Build pagination, sorting, and limiting info
         $current_page = (isset($_REQUEST['pg']) && is_numeric($_REQUEST['pg']) ? max(1, intval($_REQUEST['pg'])) : 1);
@@ -128,16 +130,18 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
         );
         $this->Form->appendChild($table);
 
-        // Append table actions
-        $options = array(
-            array(null, false, __('With Selected...')),
-            array('delete', false, __('Delete'))
-        );
+        // Append table actions, if developer
+        if (Tracker::Author()->isDeveloper()) {
+            $options = array(
+                array(null, false, __('With Selected...')),
+                array('delete', false, __('Delete'))
+            );
 
-        $tableActions = new XMLElement('div');
-        $tableActions->setAttribute('class', 'actions');
-        $tableActions->appendChild(Widget::Apply($options));
-        $this->Form->appendChild($tableActions);
+            $tableActions = new XMLElement('div');
+            $tableActions->setAttribute('class', 'actions');
+            $tableActions->appendChild(Widget::Apply($options));
+            $this->Form->appendChild($tableActions);
+        }
 
         // Append pagination
         $filter_sql = Tracker::buildFilterSQL($filters);
@@ -195,7 +199,8 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
 
     public function __actionIndex()
     {
-        if (isset($_POST)) {
+        // Only developers can make actions
+        if (isset($_POST) && Tracker::Author()->isDeveloper()) {
             $checked = @array_keys($_POST['items']);
 
             if (@array_key_exists('clear-all', $_POST['action'])) {

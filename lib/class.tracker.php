@@ -616,5 +616,12 @@
 			}
 			return $author_string;
 		}
-		
+
+		public static function Author()
+		{
+			if (is_callable(array('Symphony', 'Author'))) {
+				return Symphony::Author();
+			}
+			return Symphony::instance()->Author;
+		}
 	}

@@ -6,12 +6,15 @@ class Extension_Tracker extends Extension
 {
     public function fetchNavigation()
     {
+        $author = Tracker::Author();
+        // Work around single group limit in nav
+        $group = $author && $author->isDeveloper() ? 'developer' : 'manager';
         return array(
             array(
                 'location'	=> __('System'),
                 'name'		=> __('Tracker Activity'),
                 'link'		=> '/',
-                'limit'		=> 'developer'
+                'limit'		=> $group
             )
         );
     }
