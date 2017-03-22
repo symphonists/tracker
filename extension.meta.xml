@@ -18,6 +18,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.5.2" date="2017-03-22" min="2.5.x" max="2.x.x">
+			- Fix for front-end members not showing up when using email for authentication
+		</release>
 		<release version="1.5.1" date="2017-03-20" min="2.5.x" max="2.x.x">
 			- PHP7 fix
 		</release>
