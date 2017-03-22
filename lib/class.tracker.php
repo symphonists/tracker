@@ -303,9 +303,9 @@
 					}
 				
 					// Otherwise build a link to the entry
-					else {				
+					else {
 						$entry_string = Widget::Anchor(
-							$value,
+							!$value ? 'unknown' : (string)$value,
 							SYMPHONY_URL . '/publish/' . $section->get('handle') . '/edit/' . $activity['item_id']
 						)->generate();
 					}
