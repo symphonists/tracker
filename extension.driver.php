@@ -549,11 +549,12 @@ class Extension_Tracker extends Extension
 
             // Set author ID. If author doesn't exist, store the IP
             // address.
-            if (Symphony::Engine()->Author) {
-                if (!$this->validateUser(Symphony::Engine()->Author->get('id'))) {
+            $author = Tracker::Author();
+            if ($author) {
+                if (!$this->validateUser($author->get('id'))) {
                     return;
                 }
-                $account = Symphony::Engine()->Author->get('id');
+                $account = $author->get('id');
             } else {
                 $account = 0;
                 $item = $_SERVER['REMOTE_ADDR'];
