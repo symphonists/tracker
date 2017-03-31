@@ -8,7 +8,7 @@ require_once(CONTENT . '/content.blueprintspages.php');
 
 class Tracker
 {
-    public function log($item_type, $item_id, $action_type, $user_id, $timestamp)
+    public static function log($item_type, $item_id, $action_type, $user_id, $timestamp)
     {
         /**
          * Build author string for the fallback username. If we've got
@@ -57,7 +57,7 @@ class Tracker
             'action_type'           => $action_type,
             'user_id'               => $user_id,
             'timestamp'             => $timestamp,
-            'fallback_username'     => Tracker::truncateValue($username)
+            'fallback_username'     => static::truncateValue($username)
         );
 
         /**
@@ -67,9 +67,9 @@ class Tracker
          * differently.
          */
         if (is_numeric($item_type)) {
-            $data['fallback_description'] = Tracker::truncateValue(Tracker::formatEntryItem($data, true));
+            $data['fallback_description'] = static::truncateValue(static::formatEntryItem($data, true));
         } else {
-            $data['fallback_description'] = Tracker::truncateValue(Tracker::formatElementItem($data, true));
+            $data['fallback_description'] = static::truncateValue(static::formatElementItem($data, true));
         }
 
         // Push it into the DB.
@@ -85,7 +85,7 @@ class Tracker
         }
     }
 
-    public function truncateValue($value, $max = 2048)
+    public static function truncateValue($value, $max = 2048)
     {
         if (General::strlen($value) > $max) {
             return $value;
@@ -97,10 +97,10 @@ class Tracker
         return $value;
     }
 
-    public function fetchActivities(array $filters,$limit = null, $start = 0, $sort = 'timestamp', $order = 'DESC')
+    public static function fetchActivities(array $filters,$limit = null, $start = 0, $sort = 'timestamp', $order = 'DESC')
     {
         // Build the filter SQL.
-        $filter_sql = Tracker::buildFilterSQL($filters);
+        $filter_sql = static::buildFilterSQL($filters);
 
         // Run the query.
         $activities = Symphony::Database()->fetch('
@@ -144,7 +144,7 @@ class Tracker
      *      );
      *
      */
-    public function buildFilterSQL($filters)
+    public static function buildFilterSQL($filters)
     {
         $columns = Symphony::Database()->fetch('DESCRIBE `tbl_tracker_activity`');
         foreach($columns as $key => $column) {
@@ -198,21 +198,21 @@ class Tracker
         return $filter_sql;
     }
 
-    public function getDescription(array $activity)
+    public static function getDescription(array $activity)
     {
-        $author_string = Tracker::formatAuthorString(
+        $author_string = static::formatAuthorString(
             $activity['user_id'],
             $activity['fallback_username']
         );
 
         // If the item type is numeric, we're dealing with an entry
         if (is_numeric($activity['item_type'])) {
-            $item = Tracker::formatEntryItem($activity);
+            $item = static::formatEntryItem($activity);
         } 
 
         // Otherwise, it's a system element
         else {
-            $item = Tracker::formatElementItem($activity);
+            $item = static::formatElementItem($activity);
         }
 
         // Concat author string, activity type, and an item description
@@ -287,7 +287,7 @@ class Tracker
         }
     }
 
-    public function formatEntryItem($activity, $fallback = false)
+    public static function formatEntryItem($activity, $fallback = false)
     {
         // Fetch the entry and its section
         $entry = EntryManager::fetch($activity['item_id']);
@@ -370,7 +370,7 @@ class Tracker
         return $item;
     }
 
-    public function formatElementItem($activity, $fallback = false)
+    public static function formatElementItem($activity, $fallback = false)
     {
         switch($activity['item_type']) {
 
@@ -611,7 +611,7 @@ class Tracker
         return $item;
     }
 
-    public function formatAuthorString($id, $username)
+    public static function formatAuthorString($id, $username)
     {
         // Get author info
         $author = AuthorManager::fetchByID($id);
