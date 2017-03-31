@@ -18,6 +18,11 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.7.0" date="2017-03-31" min="2.5.x" max="2.x.x">
+			- Fix issue with MySQL 5.7: data too long error
+			- Added more PSR-2 formatting
+			- Fix improper use of late stating binding
+		</release>
 		<release version="1.6.0" date="2017-03-23" min="2.5.x" max="2.x.x">
 			- Fix for back-end users on Symphony 2.6+
 			- Managers can now see the tracker data, but not delete it
