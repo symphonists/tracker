@@ -3,8 +3,8 @@
 require_once(TOOLKIT . '/class.datasource.php');
 require_once(EXTENSIONS . '/tracker/lib/class.tracker.php');
 
-Class datasourcetracker_activity extends Datasource{
-
+class datasourcetracker_activity extends Datasource
+{
     public $dsParamROOTELEMENT = 'tracker-activity';
 
     // Use these properties to adjust the DS output
@@ -14,13 +14,13 @@ Class datasourcetracker_activity extends Datasource{
 
     // Use this property to specify Sections to include (includes all by default)
     // Example: public $dsParamSECTIONS = array(1,2,3);
-    public $dsParamSECTIONS = NULL;
+    public $dsParamSECTIONS = null;
 
     // Use this property to specify what actions to include
     // (choose from 'created', 'updated', and 'deleted')
     public $dsParamACTIONS = array('created','updated');
 
-    public function __construct(&$parent, $env=NULL, $process_params=true)
+    public function __construct(&$parent, $env = null, $process_params = true)
     {
         parent::__construct($parent, $env, $process_params);
         $this->_dependencies = array();
@@ -29,17 +29,18 @@ Class datasourcetracker_activity extends Datasource{
     public function about()
     {
         return array(
-                 'name' => 'Tracker Activity',
-                 'author' => array(
-                        'name' => 'Craig Zheng',
-                        'email' => 'craig@symphony-cms.com'),
-                 'version' => '0.9',
-                 'release-date' => '2010-08-08T00:00:00+00:00');
+             'name' => 'Tracker Activity',
+             'author' => array(
+                    'name' => 'Craig Zheng',
+                    'email' => 'craig@symphony-cms.com'),
+             'version' => '0.9',
+             'release-date' => '2010-08-08T00:00:00+00:00'
+        );
     }
 
     public function getSource()
     {
-        return NULL;
+        return null;
     }
 
     public function allowEditorToParse()
@@ -47,7 +48,7 @@ Class datasourcetracker_activity extends Datasource{
         return false;
     }
 
-    public function grab(array &$param_pool = NULL)
+    public function grab(array &$param_pool = null)
     {
         $result = new XMLElement($this->dsParamROOTELEMENT);
         $param_output = array();

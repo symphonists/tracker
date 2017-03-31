@@ -521,7 +521,7 @@ class Extension_Tracker extends Extension
         if ($this->validateUser() && $this->validateElement('preferences')) {
             Tracker::log(
                 'preferences',
-                NULL,
+                null,
                 'updated',
                 $this->getAuthorID(),
                 $this->getTimestamp()
@@ -533,7 +533,7 @@ class Extension_Tracker extends Extension
 
                 Tracker::log(
                     'maintenance-mode',
-                    NULL,
+                    null,
                     ($context['settings']['maintenance_mode']['enabled'] == 'yes' ? 'enabled' : 'disabled'),
                     $this->getAuthorID(),
                     $this->getTimestamp()
@@ -545,7 +545,7 @@ class Extension_Tracker extends Extension
     public function parseLogin($context)
     {
         if ($this->validateElement('login')) {
-            $item = NULL;
+            $item = null;
 
             // Set author ID. If author doesn't exist, store the IP
             // address.
@@ -608,7 +608,7 @@ class Extension_Tracker extends Extension
                 if (!$this->validateUser($account)) {
                     return;
                 }
-                $item = NULL;
+                $item = null;
             }
 
             Tracker::log(
@@ -661,33 +661,33 @@ class Extension_Tracker extends Extension
     public function validateElement($handle)
     {
         if (in_array($handle, $this->getExclusions('system-elements'))) {
-            return FALSE;
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
     public function validateSection($id)
     {
         if (is_null($id)) {
-            return TRUE;
+            return true;
         }
         if (in_array($id, $this->getExclusions('sections'))) {
-            return FALSE;
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
-    public function validateUser($id = NULL)
+    public function validateUser($id = null)
     {
         if (is_null($id)) {
             $id = $this->getAuthorID();
         }
         if (in_array($id, $this->getExclusions('users'))) {
-            return FALSE;
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
@@ -726,7 +726,7 @@ class Extension_Tracker extends Extension
         $excluded_elements = explode(',', Symphony::Configuration()->get('excluded-system-elements', 'tracker'));
 
         foreach ($elements as $handle => $value) {
-            $selected = (in_array($handle, $excluded_elements) ? TRUE : FALSE);
+            $selected = (in_array($handle, $excluded_elements) ? true : false);
             $options[] = array(
                 $handle,
                 $selected,
@@ -754,7 +754,7 @@ class Extension_Tracker extends Extension
 
         if (!empty($sections) && is_array($sections)) {
             foreach ($sections as $section) {
-                $selected = (in_array($section->get('id'), $excluded_sections) ? TRUE : FALSE);
+                $selected = (in_array($section->get('id'), $excluded_sections) ? true : false);
                 $options[] = array(
                     $section->get('id'),
                     $selected,
@@ -782,7 +782,7 @@ class Extension_Tracker extends Extension
 
         if (!empty($authors) && is_array($authors)) {
             foreach ($authors as $author) {
-                $selected = (in_array($author->get('id'), $excluded_authors) ? TRUE : FALSE);
+                $selected = (in_array($author->get('id'), $excluded_authors) ? true : false);
                 $options[] = array(
                     $author->get('id'),
                     $selected,
@@ -844,7 +844,7 @@ class Extension_Tracker extends Extension
 
             case 'tracker_activity':
 
-                $fieldset = new XMLElement('fieldset', NULL, array('class' => 'settings'));
+                $fieldset = new XMLElement('fieldset', null, array('class' => 'settings'));
                 $fieldset->appendChild(new XMLElement('legend', __('Tracker Activity')));
 
                 $label = Widget::Label(__('Limit'), Widget::Input('config[limit]', $config['limit']));
@@ -937,7 +937,7 @@ class Extension_Tracker extends Extension
 
                         // Insert the row
                         if (!is_null($description)) {
-                            $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : NULL));
+                            $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : null));
 
                             $bOdd = !$bOdd;
                         }
