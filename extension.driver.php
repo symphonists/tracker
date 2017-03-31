@@ -252,8 +252,8 @@ class Extension_Tracker extends Extension
         if ($ret && version_compare($previousVersion, '1.7.0', '<')) {
             $ret = Symphony::Database()->query("
                 ALTER TABLE `tbl_tracker_activity`
-                    CHANGE `fallback_username` varchar(2048),
-                    CHANGE `fallback_description` varchar(2048);
+                    MODIFY `fallback_username` varchar(2048),
+                    MODIFY `fallback_description` varchar(2048);
             ");
         }
 
