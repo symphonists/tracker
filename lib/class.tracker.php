@@ -57,7 +57,7 @@ class Tracker
             'action_type'           => $action_type,
             'user_id'               => $user_id,
             'timestamp'             => $timestamp,
-            'fallback_username'     => $username
+            'fallback_username'     => Tracker::truncateValue($username)
         );
 
         /**
@@ -67,9 +67,9 @@ class Tracker
          * differently.
          */
         if (is_numeric($item_type)) {
-            $data['fallback_description'] = Tracker::formatEntryItem($data, TRUE);
+            $data['fallback_description'] = Tracker::truncateValue(Tracker::formatEntryItem($data, true));
         } else {
-            $data['fallback_description'] = Tracker::formatElementItem($data, TRUE);
+            $data['fallback_description'] = Tracker::truncateValue(Tracker::formatElementItem($data, true));
         }
 
         // Push it into the DB.
@@ -83,6 +83,18 @@ class Tracker
             $gateway->init($url . "?". http_build_query($data));
             $gateway->exec();
         }
+    }
+
+    public function truncateValue($value, $max = 2048)
+    {
+        if (General::strlen($value) > $max) {
+            return $value;
+        }
+        $value = strip_tags($value);
+        if (General::strlen($value) > $max) {
+            $value = General::substr($value, 0, $max);
+        }
+        return $value;
     }
 
     public function fetchActivities(array $filters,$limit = null, $start = 0, $sort = 'timestamp', $order = 'DESC')

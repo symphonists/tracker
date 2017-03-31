@@ -225,25 +225,45 @@ class Extension_Tracker extends Extension
     public function install()
     {
         Symphony::Database()->query(
-            'CREATE TABLE IF NOT EXISTS `tbl_tracker_activity` (
+            "CREATE TABLE IF NOT EXISTS `tbl_tracker_activity` (
                 `id` int(11) unsigned NOT NULL auto_increment,
                 `item_type` varchar(255),
                 `item_id` varchar(75),
                 `action_type` varchar(255),
                 `user_id` int(11),
                 `timestamp` timestamp,
-                `fallback_username` varchar(255),
-                `fallback_description` varchar(255),
+                `fallback_username` varchar(2048),
+                `fallback_description` varchar(2048),
                 PRIMARY KEY (`id`)
-            ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;');
+            ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
         return true;
+    }
+
+    public function update($previousVersion = null)
+    {
+        $ret = true;
+
+        if (!$previousVersion) {
+            $previousVersion = '0.0.1';
+        }
+
+        // less than 1.7.0
+        if ($ret && version_compare($previousVersion, '1.7.0', '<')) {
+            $ret = Symphony::Database()->query("
+                ALTER TABLE `tbl_tracker_activity`
+                    CHANGE `fallback_username` varchar(2048),
+                    CHANGE `fallback_description` varchar(2048);
+            ");
+        }
+
+        return $ret;
     }
 
     public function uninstall()
     {
         Symphony::Database()->query(
-            'DROP TABLE IF EXISTS `tbl_tracker_activity`;'
+            "DROP TABLE IF EXISTS `tbl_tracker_activity`;"
         );
         Symphony::Configuration()->remove('tracker');
 
