@@ -18,6 +18,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="1.7.1" date="2017-03-31" min="2.5.x" max="2.x.x">
+			- Fix SQL error in update query
+		</release>
 		<release version="1.7.0" date="2017-03-31" min="2.5.x" max="2.x.x">
 			- Fix issue with MySQL 5.7: data too long error
 			- Added more PSR-2 formatting
