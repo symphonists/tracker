@@ -112,10 +112,12 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
 
                 // Assemble the columns
                 $col_date = Widget::TableData($date);
+                $col_date->setAttribute('data-title', __('Date'));
                 $col_time = Widget::TableData($time);
+                $col_time->setAttribute('data-title', __('Time'));
                 $col_desc = Widget::TableData($description, $description_class);
-
                 $col_desc->appendChild(Widget::Input("items[{$activity['id']}]", null, 'checkbox'));
+                $col_desc->setAttribute('data-title', __('Activity'));
 
                 // Insert the row
                 $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), $row_class, 'activity-' . $activity['id']);

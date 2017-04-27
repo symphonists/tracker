@@ -18,6 +18,9 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.0.0" date="TBA" min="4.0.0" max="4.x.x">
+			- Update for Symphony 4.x
+		</release>
 		<release version="2.1.2" date="2018-07-24" min="2.6.0" max="2.x.x">
 			- Set Author Id to 0 if no author is set (#42)
 		</release>
