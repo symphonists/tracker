@@ -19,6 +19,10 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
         // Add a button to clear all activity, if developer
         if (Tracker::Author()->isDeveloper()) {
             $clearform = Widget::Form(Symphony::Engine()->getCurrentPageURL(), 'post');
+            Widget::registerSVGIcon(
+                'close',
+                '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="19.9px" height="19.9px" viewBox="0 0 19.9 19.9"><path fill="currentColor" d="M1,19.9c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4L18.2,0.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4L1.7,19.6C1.5,19.8,1.3,19.9,1,19.9z"/><path fill="currentColor" d="M18.9,19.9c-0.3,0-0.5-0.1-0.7-0.3L0.3,1.7c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l17.9,17.9c0.4,0.4,0.4,1,0,1.4C19.4,19.8,19.2,19.9,18.9,19.9z"/></svg>'
+            );
             $button = new XMLElement(
                 'button',
                 Widget::SVGIcon('close') . '<span><span>' . __('Clear All') . '</span></span>'
