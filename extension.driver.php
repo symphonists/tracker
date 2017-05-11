@@ -944,7 +944,7 @@ class Extension_Tracker extends Extension
                 // Check to see we are being called in the right context
                 // Dashboard also has `contentExtensionDashboardPanel_Config` which extends `AjaxPage`
                 if (method_exists($page, 'addStylesheetToHead')) {
-                    $page->addStylesheetToHead(URL . '/extensions/tracker/assets/dashboard.css', 'screen', 151);
+                    $page->addStylesheetToHead(URL . '/extensions/tracker/assets/tracker.dashboard.css', 'screen', 151);
                 }
 
                 $logs = Tracker::fetchActivities($filters, (int) $config['limit'], 0);
@@ -989,12 +989,15 @@ class Extension_Tracker extends Extension
 
                         // Assemble the columns
                         $col_date = Widget::TableData($date);
+                        $col_date->setAttribute('data-title', __('Activity'));
                         $col_time = Widget::TableData($time);
+                        $col_time->setAttribute('data-title', __('Date'));
                         $col_desc = Widget::TableData($description);
+                        $col_desc->setAttribute('data-title', __('Time'));
 
                         // Insert the row
                         if (!is_null($description)) {
-                            $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : null));
+                            $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time));
 
                             $bOdd = !$bOdd;
                         }
