@@ -308,7 +308,7 @@ class Tracker
             $primary_field = reset($section->fetchVisibleColumns());
             if ($primary_field) {
                 $data = $entry->getData($primary_field->get('id'));
-                $value = $primary_field->prepareTableValue($data);
+                $value = $primary_field->prepareReadableValue($data);
 
                 // If we're creating the fallback, just return a string
                 if ($fallback) {
