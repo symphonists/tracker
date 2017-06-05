@@ -15,7 +15,7 @@ class Tracker
          * a valid author, grab the full name. Otherwise, determine
          * whether it's an anonymous front-end user or a potentially
          * malicious person trying to access the back end. In the latter
-         * case, output the IP or email we captured for reference. 
+         * case, output the IP or email we captured for reference.
          */
         $author = AuthorManager::fetchByID($user_id);
         $members = $_SESSION['sym-members'];
@@ -87,7 +87,7 @@ class Tracker
 
     public static function truncateValue($value, $max = 2048)
     {
-        if (General::strlen($value) > $max) {
+        if (General::strlen($value) < $max) {
             return $value;
         }
         $value = strip_tags($value);
@@ -208,7 +208,7 @@ class Tracker
         // If the item type is numeric, we're dealing with an entry
         if (is_numeric($activity['item_type'])) {
             $item = static::formatEntryItem($activity);
-        } 
+        }
 
         // Otherwise, it's a system element
         else {
@@ -341,7 +341,7 @@ class Tracker
         // Otherwise build a fallback
         elseif ($fallback) {
             $section_string = $section->get('name');
-        } 
+        }
 
         // Or build a link to the section
         else {
