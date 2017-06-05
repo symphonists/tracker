@@ -18,6 +18,10 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="2.0.0" date="2017-03-31" min="2.6" max="2.6.x">
+			- Use renamed `prepareReadableValue` function instead of outdated `preparePlainTextValue`
+			- Fix value truncation
+		</release>
 		<release version="1.7.1" date="2017-03-31" min="2.5.x" max="2.x.x">
 			- Fix SQL error in update query
 		</release>
