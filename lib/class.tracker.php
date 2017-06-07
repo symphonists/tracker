@@ -17,30 +17,24 @@ class Tracker
          * malicious person trying to access the back end. In the latter
          * case, output the IP or email we captured for reference.
          */
-        $author = AuthorManager::fetchByID($user_id);
         $members = $_SESSION['sym-members'];
 
-        if ($author instanceof Author) {
-            $username = $author->getFullName();
+        if (!empty($members) || is_array($user_id)) {
+            $member = array(
+                'username' => $members['username'] ? $members['username'] : $user_id['username'],
+                'email' => $members['email'] ? $members['email'] : $user_id['email'],
+                'section-id' => $members['members-section-id'],
+                'id' => $members['id']
+            );
+
+            $username = Tracker::getMemberUsername($member);
+            $user_id = null;
         }
         else {
-            if (!empty($members)) {
-                if ($members['members-section-id'] && $members['id']) {
-                    // Check if member is using username, otherwise use email
-                    if (isset($members['email']) && !empty($members['email'])) {
-                        $membername = $members['email'];
-                    } else if (isset($members['username']) && !empty($members['username'])) {
-                        $membername = $members['username'];
-                    } else {
-                        $membername = 'unknown';
-                    }
-                    $members_section = SectionManager::fetch($members['members-section-id'])->get('handle');
-                    $members_link = SYMPHONY_URL . '/publish/' . $members_section .'/edit/' . $members['id'] . '/';
-                    $username = __('The front-end member %s', array('<a href="' . $members_link . '">' . $membername . '</a>'));
-                }
-                else {
-                    $username = __('The front-end member %s', array($membername));
-                }
+            $author = AuthorManager::fetchByID($user_id);
+
+            if ($author instanceof Author) {
+                $username = $author->getFullName();
             }
             else if (is_numeric($item_type)) {
                 $username = __('A front-end user');
@@ -83,6 +77,27 @@ class Tracker
             $gateway->init($url . "?". http_build_query($data));
             $gateway->exec();
         }
+    }
+
+    public static function getMemberUsername($member)
+    {
+        if (empty($member['username']) && empty($member['email'])) {
+            $username = __('An unkown Member');
+        }
+        else if (!empty($member['section-id']) && !empty($member['id'])) {
+            $sectionID = $member['section-id'] ? $member['section-id'] : extension_Members::getMembersSection();
+            $sectionHandle = SectionManager::fetch($sectionID)->get('handle');
+            $link = SYMPHONY_URL . '/publish/' . $sectionHandle . '/edit/' . $member['id'] . '/';
+            $name = $member['username'] ? $member['username'] : $member['email'];
+
+            $username = __('Member %s', array('<a href="' . $link . '">' . $name . '</a>'));
+        }
+        else {
+            $name = $member['username'] ? $member['username'] : $member['email'];
+            $username = __('Member %s', array($name));
+        }
+
+        return $username;
     }
 
     public static function truncateValue($value, $max = 2048)
@@ -272,6 +287,18 @@ class Tracker
 
                 case 'uninstalled':
                     $description = __('%1$s uninstalled %2$s.', $replacements);
+                    break;
+
+                case 'regenerated':
+                    $description = __('%1$s regenerated %2$s.', $replacements);
+                    break;
+
+                case 'activated':
+                    $description = __('%1$s activated %2$s.', $replacements);
+                    break;
+
+                case 'requested':
+                    $description = __('%1$s requested %2$s.', $replacements);
                     break;
 
                 default:
@@ -600,7 +627,27 @@ class Tracker
             break;
 
             case "password-reset":
-                $item = __(' his/her password');
+                $item = __(' their password');
+            break;
+
+            case "members-login":
+                $item = __(' to the front-end');
+            break;
+
+            case "members-login-failure":
+                $item = __(' to the front-end');
+            break;
+
+            case "members-activation":
+                $item = __(' their account');
+            break;
+
+            case "members-regenerate-activation":
+                $item = __(' their activation code');
+            break;
+
+            case "members-forgot-password":
+                $item = __(' a recovery code');
             break;
 
             default:
