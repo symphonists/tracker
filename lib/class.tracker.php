@@ -17,9 +17,17 @@ class Tracker
          * malicious person trying to access the back end. In the latter
          * case, output the IP or email we captured for reference.
          */
+        $author = null;
         $members = $_SESSION['sym-members'];
 
-        if (!empty($members) || is_array($user_id)) {
+        if (is_numeric($user_id)) {
+            $author = AuthorManager::fetchByID($user_id);
+        }
+
+        if ($author instanceof Author) {
+            $username = $author->getFullName();
+        }
+        else if (!empty($members) || is_array($user_id)) {
             $member = array(
                 'username' => $members['username'] ? $members['username'] : $user_id['username'],
                 'email' => $members['email'] ? $members['email'] : $user_id['email'],
@@ -30,18 +38,11 @@ class Tracker
             $username = Tracker::getMemberUsername($member);
             $user_id = null;
         }
+        else if (is_numeric($item_type)) {
+            $username = __('A front-end user');
+        }
         else {
-            $author = AuthorManager::fetchByID($user_id);
-
-            if ($author instanceof Author) {
-                $username = $author->getFullName();
-            }
-            else if (is_numeric($item_type)) {
-                $username = __('A front-end user');
-            }
-            else {
-                $username = __('An unidentified user (%s)', array($item_id));
-            }
+            $username = __('An unidentified user (%s)', array($item_id));
         }
 
         // Build the $data array for our table columns
@@ -558,7 +559,7 @@ class Tracker
                     // If the author edited their own record
                     if ($activity['user_id'] == $activity['item_id']) {
                         $item = __(
-                            ' his/her %1s',
+                            ' their %1s',
                             array(
                                 ($fallback ? __('author record') : Widget::Anchor(
                                     __('author record'),
