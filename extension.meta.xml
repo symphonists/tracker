@@ -18,7 +18,10 @@
 		</author>
 	</authors>
 	<releases>
-		<release version="2.0.0" date="2017-03-31" min="2.6" max="2.6.x">
+		<release version="2.1.0" date="2017-06-09" min="2.6" max="2.6.x">
+			- Improved Member tracking
+		</release>
+		<release version="2.0.0" date="2017-06-05" min="2.6" max="2.6.x">
 			- Use renamed `prepareReadableValue` function instead of outdated `prepareTableValue`
 			- Fix value truncation
 		</release>
