@@ -203,6 +203,43 @@ class Extension_Tracker extends Extension
                 'callback'	=> 'parsePasswordAction'
             ),
 
+            // Member tracking
+            array(
+                'page'		=> '/frontend/',
+                'delegate'	=> 'MembersPostLogin',
+                'callback'	=> 'parseMembersLogin'
+            ),
+            array(
+                'page'		=> '/frontend/',
+                'delegate'	=> 'MembersLoginFailure',
+                'callback'	=> 'parseMembersLoginFailure'
+            ),
+            array(
+                'page'		=> '/frontend/',
+                'delegate'	=> 'MembersPostActivation',
+                'callback'	=> 'parseMembersPostActivation'
+            ),
+            array(
+                'page'		=> '/frontend/',
+                'delegate'	=> 'MembersPostForgotPassword',
+                'callback'	=> 'parseMembersPostForgotPassword'
+            ),
+            array(
+                'page'		=> '/frontend/',
+                'delegate'	=> 'MembersPostRegenerateActivationCode',
+                'callback'	=> 'parseMembersPostRegenerateActivationCode'
+            ),
+            array(
+                'page'		=> '/frontend/',
+                'delegate'	=> 'MembersPostResetPassword',
+                'callback'	=> 'parseMembersPostResetPassword'
+            ),
+            array(
+                'page'		=> '/frontend/',
+                'delegate'	=> 'MembersPasswordResetFailure',
+                'callback'	=> 'parseMembersPasswordResetFailure'
+            ),
+
             // Dashboard
             array(
                 'page'		=> '/backend/',
@@ -973,6 +1010,106 @@ class Extension_Tracker extends Extension
                 $context['panel']->appendChild($table);
 
             break;
+        }
+    }
+
+    /*-------------------------------------------------------------------------
+        Members
+    -------------------------------------------------------------------------*/
+
+    public function parseMembersLogin($context)
+    {
+        if ($this->validateElement('members-login')) {
+            Tracker::log(
+                'members-login',
+                null,
+                'logged in',
+                null,
+                $this->getTimestamp()
+            );
+        }
+    }
+
+    public function parseMembersLoginFailure($context)
+    {
+        if ($this->validateElement('members-login')) {
+            $member = array(
+                'username' => $context['username'],
+                'email' => $context['email']
+            );
+
+            Tracker::log(
+                'members-login-failure',
+                null,
+                'attempted to log in',
+                $member,
+                $this->getTimestamp()
+            );
+        }
+    }
+
+    public function MembersPostActivation($context)
+    {
+        if ($this->validateElement('members-activation')) {
+            Tracker::log(
+                'members-activation',
+                null,
+                'activated',
+                null,
+                $this->getTimestamp()
+            );
+        }
+    }
+
+    public function MembersPostRegenerateActivationCode($context)
+    {
+        if ($this->validateElement('members-activation')) {
+            Tracker::log(
+                'members-regenerate-activation',
+                null,
+                'regenerated',
+                null,
+                $this->getTimestamp()
+            );
+        }
+    }
+
+    public function MembersPostForgotPassword($context)
+    {
+        if ($this->validateElement('members-forgot-password')) {
+            Tracker::log(
+                'members-forgot-password',
+                null,
+                'requested',
+                null,
+                $this->getTimestamp()
+            );
+        }
+    }
+
+    public function MembersPostResetPassword($context)
+    {
+        if ($this->validateElement('members-reset-password')) {
+            Tracker::log(
+                'reset-password',
+                null,
+                'reset',
+                null,
+                $this->getTimestamp()
+            );
+        }
+    }
+
+    public function MembersPasswordResetFailure($context)
+    {
+        if ($this->validateElement('members-password')) {
+            Tracker::log(
+                'reset-password',
+                null,
+                'attempted to reset',
+                $context['username'],
+                $this->getTimestamp()
+            );
         }
     }
 
