@@ -200,7 +200,7 @@ class Extension_Tracker extends Extension
             array(
                 'page'		=> '/login/',
                 'delegate'	=> 'AuthorPostPasswordResetRequest',
-                'callback'	=> 'parseMembersLogin'
+                'callback'	=> 'parsePasswordAction'
             ),
 
             // Member tracking
