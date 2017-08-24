@@ -608,7 +608,7 @@ class Tracker
                     $about = ExtensionManager::about($activity['item_id']);
                 }
                 catch (Exception $e) {
-                    $about = NULL;
+                    $about = null;
                 }
                 if (empty($about)) {
                     $item = $activity['fallback_description'];
@@ -652,7 +652,7 @@ class Tracker
             break;
 
             default:
-                $item = NULL;
+                $item = null;
             break;
         }
 

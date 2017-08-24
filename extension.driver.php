@@ -263,14 +263,14 @@ class Extension_Tracker extends Extension
     {
         Symphony::Database()->query(
             "CREATE TABLE IF NOT EXISTS `tbl_tracker_activity` (
-                `id` int(11) unsigned NOT NULL auto_increment,
-                `item_type` varchar(255),
-                `item_id` varchar(75),
-                `action_type` varchar(255),
-                `user_id` int(11),
-                `timestamp` timestamp,
-                `fallback_username` varchar(2048),
-                `fallback_description` varchar(2048),
+                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+                `item_type` VARCHAR(255),
+                `item_id` VARCHAR(75),
+                `action_type` VARCHAR(255),
+                `user_id` INT(11),
+                `timestamp` TIMESTAMP,
+                `fallback_username` VARCHAR(2048),
+                `fallback_description` VARCHAR(2048),
                 PRIMARY KEY (`id`)
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
 
@@ -289,8 +289,8 @@ class Extension_Tracker extends Extension
         if ($ret && version_compare($previousVersion, '1.7.0', '<')) {
             $ret = Symphony::Database()->query("
                 ALTER TABLE `tbl_tracker_activity`
-                    MODIFY `fallback_username` varchar(2048),
-                    MODIFY `fallback_description` varchar(2048);
+                    MODIFY `fallback_username` VARCHAR(2048),
+                    MODIFY `fallback_description` VARCHAR(2048);
             ");
         }
 

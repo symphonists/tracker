@@ -87,7 +87,7 @@ class datasourcetracker_activity extends Datasource
             );
 
             // Build the <activity> element
-            $item = new XMLElement('activity', NULL, array(
+            $item = new XMLElement('activity', null, array(
                 'type' => $activity['action_type'],
                 'entry-id' => $activity['item_id']
             ));
