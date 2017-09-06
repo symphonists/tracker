@@ -154,7 +154,7 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
         $total_entries = Symphony::Database()->fetchVar('count', 0, $sql);
         $remaining_entries = max(0, $total_entries - ($start + $per_page));
         $total_pages = max(1, ceil($total_entries * (1 / $per_page)));
-        $remaining_pages = max(0, $total-pages - $current_page);
+        $remaining_pages = max(0, $total_pages - $current_page);
 
         if ($total_pages > 1) {
             $ul = new XMLElement('ul');
