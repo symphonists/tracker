@@ -261,20 +261,29 @@ class Extension_Tracker extends Extension
 
     public function install()
     {
-        Symphony::Database()->query(
-            "CREATE TABLE IF NOT EXISTS `tbl_tracker_activity` (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-                `item_type` VARCHAR(255),
-                `item_id` VARCHAR(75),
-                `action_type` VARCHAR(255),
-                `user_id` INT(11),
-                `timestamp` TIMESTAMP,
-                `fallback_username` VARCHAR(2048),
-                `fallback_description` VARCHAR(2048),
-                PRIMARY KEY (`id`)
-            ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
-
-        return true;
+        return Symphony::Database()
+            ->create('tbl_tracker_activity')
+            ->ifNotExists()
+            ->charset('utf8')
+            ->collate('utf8_unicode_ci')
+            ->fields([
+                'id' => [
+                    'type' => 'int(11)',
+                    'auto' => true,
+                ],
+                'item_type' => 'varchar(255)',
+                'item_id' => 'varchar(75)',
+                'action_type' => 'varchar(255)',
+                'user_id' => 'int(11)',
+                'timestamp' => 'timestamp',
+                'fallback_username' => 'varchar(2048)',
+                'fallback_description' => 'varchar(2048)',
+            ])
+            ->keys([
+                'id' => 'primary',
+            ])
+            ->execute()
+            ->success();
     }
 
     public function update($previousVersion = null)
@@ -287,11 +296,14 @@ class Extension_Tracker extends Extension
 
         // less than 1.7.0
         if ($ret && version_compare($previousVersion, '1.7.0', '<')) {
-            $ret = Symphony::Database()->query("
-                ALTER TABLE `tbl_tracker_activity`
-                    MODIFY `fallback_username` VARCHAR(2048),
-                    MODIFY `fallback_description` VARCHAR(2048);
-            ");
+            $ret = Symphony::Database()
+                ->alter('tbl_tracker_activity')
+                ->modify([
+                    'fallback_username' => 'varchar(2048)',
+                    'fallback_description' => 'varchar(2048)',
+                ])
+                ->execute()
+                ->success();
         }
 
         return $ret;
@@ -299,9 +311,12 @@ class Extension_Tracker extends Extension
 
     public function uninstall()
     {
-        Symphony::Database()->query(
-            "DROP TABLE IF EXISTS `tbl_tracker_activity`;"
-        );
+        Symphony::Database()
+            ->drop('tbl_tracker_activity')
+            ->ifExists()
+            ->execute()
+            ->success();
+
         Symphony::Configuration()->remove('tracker');
 
         return Symphony::Configuration()->write();
