@@ -272,7 +272,10 @@ class Extension_Tracker extends Extension
                     'auto' => true,
                 ],
                 'item_type' => 'varchar(255)',
-                'item_id' => 'varchar(75)',
+                'item_id' => [
+                    'type' => 'varchar(75)',
+                    'null' => true,
+                ],
                 'action_type' => 'varchar(255)',
                 'user_id' => 'int(11)',
                 'timestamp' => 'timestamp',
