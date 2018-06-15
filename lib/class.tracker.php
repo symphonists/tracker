@@ -184,7 +184,9 @@ class Tracker
             // Iterate over the field filters
             foreach($filters as $field => $options) {
                 // Prevent fatal error when filter field doesn't exist
-                if (!in_array($field,$columns)) { return; }
+                if (!in_array($field, $columns)) {
+                    return array();
+                }
 
                 if (count($options) < 2) {
                     $filter_sql[$field] = $options[0];
