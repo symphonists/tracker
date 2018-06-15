@@ -113,24 +113,29 @@ class Tracker
         return $value;
     }
 
-    public static function fetchActivities(array $filters,$limit = null, $start = 0, $sort = 'timestamp', $order = 'DESC')
+    public static function fetchActivities($filters = array(),$limit = null, $start = 0, $sort = 'timestamp', $order = 'DESC')
     {
         // Build the filter SQL.
         $filter_sql = static::buildFilterSQL($filters);
 
         // Run the query.
-        $activities = Symphony::Database()->fetch('
-            SELECT
-                *
-            FROM
-                `tbl_tracker_activity`' .
-            $filter_sql .
-            ' ORDER BY `' .
-                $sort . '` ' . $order
-            . ($limit ? ' LIMIT ' . intval($start) . ', ' . intval($limit) : '')
-        );
+        $q = Symphony::Database()
+            ->select(['*'])
+            ->from('tbl_tracker_activity');
 
-        return $activities;
+        foreach ($filter_sql as $key => $value) {
+            $q->where([$key => $value]);
+        }
+
+        $q->orderBy($sort, $order);
+
+        if ($limit !== null) {
+            $q->limit(intval($limit));
+        }
+
+        return $q
+            ->execute()
+            ->rows();
     }
 
     /**
@@ -160,54 +165,39 @@ class Tracker
      *      );
      *
      */
-    public static function buildFilterSQL($filters)
+    public static function buildFilterSQL($filters = array())
     {
-        $columns = Symphony::Database()->fetch('DESCRIBE `tbl_tracker_activity`');
+        $columns = Symphony::Database()
+            ->describe('tbl_tracker_activity')
+            ->execute()
+            ->rows();
+
         foreach($columns as $key => $column) {
             $columns[$key] = $column['Field'];
         }
 
-        $filter_sql = '';
+        $filter_sql = array();
 
         // If we've got a $filters array, let's build the SQL
-        // TODO: I imagine this can be made more elegant
         if (!empty($filters) && is_array($filters)) {
-            $filter_sql .= ' WHERE ';
-            $i = 0;
 
             // Iterate over the field filters
             foreach($filters as $field => $options) {
-
                 // Prevent fatal error when filter field doesn't exist
                 if (!in_array($field,$columns)) { return; }
 
-                // If there's more than one field filter
-                if ($i > 0) {
-                    $filter_sql .= ' AND ';
+                if (count($options) < 2) {
+                    $filter_sql[$field] = $options[0];
                 }
-
-                // Allow custom SQL by passing a string
-                // TODO: Is this a security concern?
-                if (!is_array($options)) {
-                    $filter_sql .= '`' . $field . '` ' . $options . ' ';
-                }
-
-                // Iterate over the filter values and group them with OR
                 else {
-                    foreach($options as $num => $option) {
-                        if ($num == 0 && count($options) > 1) {
-                            $filter_sql .= ' (';
-                        }
-                        if ($num > 0) {
-                            $filter_sql .= ' OR ';
-                        }
-                        $filter_sql .= '`' . $field . '` = "' . $option . '"';
-                        if (count($options) > 1 && $option == end($options)) {
-                            $filter_sql .= ')';
-                        }
+                    $opts = array();
+
+                    foreach($options as $option) {
+                        $opts[] = [$field => $option];
                     }
+
+                    $filter_sql['or'] = $opts;
                 }
-                $i++;
             }
         }
 

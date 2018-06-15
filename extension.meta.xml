@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension id="tracker" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
-	<name>Tracker</name>
+	<name>Tracker Activity</name>
 	<description>Track user and system activity</description>
 	<repo type="github">https://github.com/symphonists/tracker</repo>
 	<url type="issues">https://github.com/symphonists/tracker/issues</url>
