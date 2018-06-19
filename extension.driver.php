@@ -824,7 +824,10 @@ class Extension_Tracker extends Extension
 
         $sm = new SectionManager(Administration::instance());
 
-        $sections = $sm->fetch();
+        $sections = $sm
+            ->select()
+            ->execute()
+            ->rows();
         $excluded_sections = explode(',', Symphony::Configuration()->get('excluded-sections', 'tracker'));
 
         if (!empty($sections) && is_array($sections)) {
@@ -852,7 +855,10 @@ class Extension_Tracker extends Extension
         $options = array();
 
         $am = new AuthorManager(Administration::instance());
-        $authors = $am->fetch();
+        $authors = $am
+            ->select()
+            ->execute()
+            ->rows();
         $excluded_authors = explode(',',Symphony::Configuration()->get('excluded-users', 'tracker'));
 
         if (!empty($authors) && is_array($authors)) {

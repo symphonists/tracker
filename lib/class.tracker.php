@@ -87,7 +87,12 @@ class Tracker
         }
         else if (!empty($member['section-id']) && !empty($member['id'])) {
             $sectionID = $member['section-id'] ? $member['section-id'] : extension_Members::getMembersSection();
-            $sectionHandle = SectionManager::fetch($sectionID)->get('handle');
+            $sectionHandle = (new SectionManager)
+                ->select()
+                ->section($sectionID)
+                ->execute()
+                ->next()
+                ->get('handle');
             $link = SYMPHONY_URL . '/publish/' . $sectionHandle . '/edit/' . $member['id'] . '/';
             $name = $member['username'] ? $member['username'] : $member['email'];
 
@@ -310,9 +315,17 @@ class Tracker
     public static function formatEntryItem($activity, $fallback = false)
     {
         // Fetch the entry and its section
-        $entry = EntryManager::fetch($activity['item_id']);
+        $entry = (new EntryManager)
+            ->select()
+            ->entry($activity['item_id'])
+            ->execute()
+            ->next();
         $entry = $entry[0];
-        $section = SectionManager::fetch($activity['item_type']);
+        $section = (new SectionManager)
+            ->select()
+            ->section($activity['item_type'])
+            ->execute()
+            ->next();
 
         // If the entry no longer exists, get the fallback entry description
         if (!($entry instanceof Entry) || !($section instanceof Section)) {
@@ -513,7 +526,11 @@ class Tracker
             case "sections":
 
                 // Grab the section info
-                $section = SectionManager::fetch($activity['item_id']);
+                $section = (new SectionManager)
+                    ->select()
+                    ->section($activity['item_id'])
+                    ->execute()
+                    ->next();
 
                 // If the section no longer exists, use the fallback description
                 if (!($section instanceof Section)) {
