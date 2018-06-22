@@ -277,7 +277,10 @@ class Extension_Tracker extends Extension
                     'null' => true,
                 ],
                 'action_type' => 'varchar(255)',
-                'user_id' => 'int(11)',
+                'user_id' => [
+                    'type' => 'int(11)',
+                    'null' => true,
+                ],
                 'timestamp' => 'timestamp',
                 'fallback_username' => 'varchar(2048)',
                 'fallback_description' => 'varchar(2048)',
