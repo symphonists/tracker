@@ -684,7 +684,7 @@ class Extension_Tracker extends Extension
 
     public function getAuthorID()
     {
-        return !empty(Symphony::Author()) ? Symphony::Author()->get('id') : null;
+        return !empty(Symphony::Author()) ? Symphony::Author()->get('id') : 0;
     }
 
     public function getTimestamp()
