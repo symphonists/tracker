@@ -318,9 +318,11 @@ class Tracker
         $entry = (new EntryManager)
             ->select()
             ->entry($activity['item_id'])
+            ->section($activity['item_type'])
+            ->includeAllFields()
             ->execute()
             ->next();
-        $entry = $entry[0];
+
         $section = (new SectionManager)
             ->select()
             ->section($activity['item_type'])
