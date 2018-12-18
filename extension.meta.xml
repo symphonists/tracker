@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <extension id="tracker" status="released" xmlns="http://getsymphony.com/schemas/extension/1.0">
-	<name>Tracker</name>
+	<name>Tracker Activity</name>
 	<description>Track user and system activity</description>
 	<repo type="github">https://github.com/symphonists/tracker</repo>
 	<url type="issues">https://github.com/symphonists/tracker/issues</url>
@@ -18,6 +18,11 @@
 		</author>
 	</authors>
 	<releases>
+		<release version="3.0.0" date="TBA" min="4.0.0" max="4.x.x" php-min="5.6.x" php-max="7.x.x">
+			- Update for Symphony 4.x
+			- Code refactoring for Database and EQFA
+			- Replace deprecated method fetch() by select()
+		</release>
 		<release version="2.1.2" date="2018-07-24" min="2.6.0" max="2.x.x">
 			- Set Author Id to 0 if no author is set (#42)
 		</release>

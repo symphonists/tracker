@@ -261,20 +261,33 @@ class Extension_Tracker extends Extension
 
     public function install()
     {
-        Symphony::Database()->query(
-            "CREATE TABLE IF NOT EXISTS `tbl_tracker_activity` (
-                `id` int(11) unsigned NOT NULL auto_increment,
-                `item_type` varchar(255),
-                `item_id` varchar(75),
-                `action_type` varchar(255),
-                `user_id` int(11),
-                `timestamp` timestamp,
-                `fallback_username` varchar(2048),
-                `fallback_description` varchar(2048),
-                PRIMARY KEY (`id`)
-            ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;");
-
-        return true;
+        return Symphony::Database()
+            ->create('tbl_tracker_activity')
+            ->ifNotExists()
+            ->fields([
+                'id' => [
+                    'type' => 'int(11)',
+                    'auto' => true,
+                ],
+                'item_type' => 'varchar(255)',
+                'item_id' => [
+                    'type' => 'varchar(75)',
+                    'null' => true,
+                ],
+                'action_type' => 'varchar(255)',
+                'user_id' => [
+                    'type' => 'int(11)',
+                    'null' => true,
+                ],
+                'timestamp' => 'timestamp',
+                'fallback_username' => 'varchar(2048)',
+                'fallback_description' => 'varchar(2048)',
+            ])
+            ->keys([
+                'id' => 'primary',
+            ])
+            ->execute()
+            ->success();
     }
 
     public function update($previousVersion = null)
@@ -287,11 +300,14 @@ class Extension_Tracker extends Extension
 
         // less than 1.7.0
         if ($ret && version_compare($previousVersion, '1.7.0', '<')) {
-            $ret = Symphony::Database()->query("
-                ALTER TABLE `tbl_tracker_activity`
-                    MODIFY `fallback_username` varchar(2048),
-                    MODIFY `fallback_description` varchar(2048);
-            ");
+            $ret = Symphony::Database()
+                ->alter('tbl_tracker_activity')
+                ->modify([
+                    'fallback_username' => 'varchar(2048)',
+                    'fallback_description' => 'varchar(2048)',
+                ])
+                ->execute()
+                ->success();
         }
 
         return $ret;
@@ -299,9 +315,12 @@ class Extension_Tracker extends Extension
 
     public function uninstall()
     {
-        Symphony::Database()->query(
-            "DROP TABLE IF EXISTS `tbl_tracker_activity`;"
-        );
+        Symphony::Database()
+            ->drop('tbl_tracker_activity')
+            ->ifExists()
+            ->execute()
+            ->success();
+
         Symphony::Configuration()->remove('tracker');
 
         return Symphony::Configuration()->write();
@@ -806,7 +825,10 @@ class Extension_Tracker extends Extension
 
         $sm = new SectionManager(Administration::instance());
 
-        $sections = $sm->fetch();
+        $sections = $sm
+            ->select()
+            ->execute()
+            ->rows();
         $excluded_sections = explode(',', Symphony::Configuration()->get('excluded-sections', 'tracker'));
 
         if (!empty($sections) && is_array($sections)) {
@@ -834,7 +856,10 @@ class Extension_Tracker extends Extension
         $options = array();
 
         $am = new AuthorManager(Administration::instance());
-        $authors = $am->fetch();
+        $authors = $am
+            ->select()
+            ->execute()
+            ->rows();
         $excluded_authors = explode(',',Symphony::Configuration()->get('excluded-users', 'tracker'));
 
         if (!empty($authors) && is_array($authors)) {
@@ -944,7 +969,7 @@ class Extension_Tracker extends Extension
                 // Check to see we are being called in the right context
                 // Dashboard also has `contentExtensionDashboardPanel_Config` which extends `AjaxPage`
                 if (method_exists($page, 'addStylesheetToHead')) {
-                    $page->addStylesheetToHead(URL . '/extensions/tracker/assets/dashboard.css', 'screen', 151);
+                    $page->addStylesheetToHead(URL . '/extensions/tracker/assets/tracker.dashboard.css', 'screen', 151);
                 }
 
                 $logs = Tracker::fetchActivities($filters, (int) $config['limit'], 0);
@@ -989,12 +1014,15 @@ class Extension_Tracker extends Extension
 
                         // Assemble the columns
                         $col_date = Widget::TableData($date);
+                        $col_date->setAttribute('data-title', __('Activity'));
                         $col_time = Widget::TableData($time);
+                        $col_time->setAttribute('data-title', __('Date'));
                         $col_desc = Widget::TableData($description);
+                        $col_desc->setAttribute('data-title', __('Time'));
 
                         // Insert the row
                         if (!is_null($description)) {
-                            $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), ($bOdd ? 'odd' : null));
+                            $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time));
 
                             $bOdd = !$bOdd;
                         }

@@ -19,7 +19,14 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
         // Add a button to clear all activity, if developer
         if (Tracker::Author()->isDeveloper()) {
             $clearform = Widget::Form(Symphony::Engine()->getCurrentPageURL(), 'post');
-            $button = new XMLElement('button', __('Clear All'));
+            Widget::registerSVGIcon(
+                'close',
+                '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="19.9px" height="19.9px" viewBox="0 0 19.9 19.9"><path fill="currentColor" d="M1,19.9c-0.3,0-0.5-0.1-0.7-0.3c-0.4-0.4-0.4-1,0-1.4L18.2,0.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4L1.7,19.6C1.5,19.8,1.3,19.9,1,19.9z"/><path fill="currentColor" d="M18.9,19.9c-0.3,0-0.5-0.1-0.7-0.3L0.3,1.7c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l17.9,17.9c0.4,0.4,0.4,1,0,1.4C19.4,19.8,19.2,19.9,18.9,19.9z"/></svg>'
+            );
+            $button = new XMLElement(
+                'button',
+                Widget::SVGIcon('close') . '<span><span>' . __('Clear All') . '</span></span>'
+            );
             $button->setAttributeArray(array('name' => 'action[clear-all]', 'class' => 'button confirm delete', 'title' => __('Clear all activity'), 'accesskey' => 'd', 'data-message' => __('Are you sure you want to clear all activity?')));
             $clearform->appendChild($button);
 
@@ -42,13 +49,9 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
         $filters = array();
 
         if (isset($_REQUEST['filter'])) {
-
-            list($column, $value) = explode(':', $_REQUEST['filter'], 2);
-            $values = explode(',', $value);
-            $filters[$column] = array();
-
-            foreach ($values as $value) {
-                $filters[$column][] = rawurldecode($value);
+            foreach (explode('-', $_REQUEST['filter']) as $key => $value) {
+                $filter = explode(':', $value);
+                $filters[$filter[0]] = explode(',', rawurldecode($filter[1]));
             }
         }
 
@@ -112,10 +115,12 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
 
                 // Assemble the columns
                 $col_date = Widget::TableData($date);
+                $col_date->setAttribute('data-title', __('Date'));
                 $col_time = Widget::TableData($time);
+                $col_time->setAttribute('data-title', __('Time'));
                 $col_desc = Widget::TableData($description, $description_class);
-
                 $col_desc->appendChild(Widget::Input("items[{$activity['id']}]", null, 'checkbox'));
+                $col_desc->setAttribute('data-title', __('Activity'));
 
                 // Insert the row
                 $tbody[] = Widget::TableRow(array($col_desc, $col_date, $col_time), $row_class, 'activity-' . $activity['id']);
@@ -145,13 +150,17 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
 
         // Append pagination
         $filter_sql = Tracker::buildFilterSQL($filters);
-        $sql = '
-            SELECT count(id) as `count`
-            FROM `tbl_tracker_activity`' .
-            $filter_sql
-        ;
         $per_page = Symphony::Configuration()->get('pagination_maximum_rows', 'symphony');
-        $total_entries = Symphony::Database()->fetchVar('count', 0, $sql);
+        $q = Symphony::Database()
+            ->select(['count(id)' => 'count'])
+            ->from('tbl_tracker_activity');
+        foreach ($filter_sql as $key => $value) {
+            $q->where([$key => $value]);
+        }
+        $total_entries = $q
+            ->execute()
+            ->variable('count');
+
         $remaining_entries = max(0, $total_entries - ($start + $per_page));
         $total_pages = max(1, ceil($total_entries * (1 / $per_page)));
         $remaining_pages = max(0, $total_pages - $current_page);
@@ -204,16 +213,24 @@ class contentExtensionTrackerIndex extends contentBlueprintsPages
             $checked = @array_keys($_POST['items']);
 
             if (@array_key_exists('clear-all', $_POST['action'])) {
-                $sql = 'TRUNCATE `tbl_tracker_activity`;';
-                Symphony::Database()->query($sql);
+                // $sql = 'TRUNCATE `tbl_tracker_activity`;';
+                // Symphony::Database()->query($sql);
+                Symphony::Database()
+                    ->truncate('tbl_tracker_activity')
+                    ->execute()
+                    ->success();
+
                 redirect(Administration::instance()->getCurrentPageURL());
             } elseif (is_array($checked) && !empty($checked)) {
 
                 switch ($_POST['with-selected']) {
 
                     case 'delete':
-
-                        Symphony::Database()->delete('tbl_tracker_activity', ' `id` IN("' . implode('","',$checked) . '")');
+                        Symphony::Database()
+                            ->delete('tbl_tracker_activity')
+                            ->where(['id' => ['in' => $checked]])
+                            ->execute()
+                            ->success();
 
                         redirect(Administration::instance()->getCurrentPageURL());
                         break;

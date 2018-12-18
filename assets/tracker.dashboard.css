@@ -1,12 +1,7 @@
-div#dashboard .tracker_log table {
-	width: 100%;
+.tracker_activity .panel-inner {
+	padding: 0;
 }
 
-div#dashboard .tracker_log table th,
-div#dashboard .tracker_log table td {
-	padding: 1px 10px 1px 0;
-}
-
-div#dashboard .tracker_log table th {
-	text-align: left;
+.tracker_activity table {
+	border: none;
 }
